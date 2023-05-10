@@ -17,7 +17,7 @@
   .header {
     max-width: 320px;
     height: 56px;
-    margin: 28px 0 42px;
+    margin: 28px auto 42px;
   }
 }
 
@@ -90,6 +90,9 @@
   line-height: 48px;
   color: #ffffff;
   margin: 0 0 16px 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 @media screen and (max-width: 767px) {
@@ -112,6 +115,9 @@
   line-height: 22px;
   color: #ffffff;
   margin: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 @media screen and (max-width: 767px) {
@@ -157,16 +163,24 @@
   gap: 20px 17px;
 }
 
+@media screen and (max-width: 767px) {
+  .photo {
+    grid-template-columns: 1fr;
+  }
+}
+
 .photo__item {
   width: 282px;
   height: 361px;
   background: #ffffff;
+  border-radius: 10px 10px 10px 10px;
 }
 
 .photo__image {
   width: 282px;
   height: 282px;
-  object-fit: contain;
+  object-fit: cover;
+  border-radius: 10px 10px 0 0;
 }
 
 .photo__text-area {
@@ -204,8 +218,7 @@
 
 .popup {
   display: none;
-  background-color: #000000;
-  opacity: 0.5;
+  background-color: rgba(0, 0, 0, 0.5);
   position: absolute;
   top: 0;
   left: 0;

@@ -77,11 +77,23 @@
       <section class="popup">
         <div class="popup__container">
           <h2 class="popup__title">Редактировать профиль</h2>
-          <fieldset>
-            <input class="popup__user-name" type="text" value="Жак-Ив Кусто" />
-            <input class="popup__user-info" type="text" value="Исследователь океана" />
-          </fieldset>
-          <button class="popup__button-close">bjn</button>
+          <form class="popup__form">
+            <fieldset>
+              <input class="popup__user-name" name="user-name" type="text" value="Жак-Ив Кусто" />
+              <input
+                class="popup__user-info"
+                name="user-info"
+                type="text"
+                value="Исследователь океана"
+              />
+            </fieldset>
+            <fieldset>
+              <input class="popup__botton-save" type="submit" value="Сохранить" />
+            </fieldset>
+            <fieldset>
+              <button class="popup__button-close" type="reset">close</button>
+            </fieldset>
+          </form>
         </div>
       </section>
     </main>

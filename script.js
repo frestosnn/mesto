@@ -14,8 +14,21 @@ function closePopup() {
 
 closeBotton.addEventListener('click', closePopup);
 
-let userName = document.querySelector('.popup__name');
-let userInfo = document.querySelector('.popup__info');
+let formElement = document.querySelector('.popup__form');
 
-userInfo.value;
-userInfo.value;
+let userName = formElement.querySelector('.popup__user-name');
+let userInfo = formElement.querySelector('.popup__user-info');
+
+function handleFormSubmit(evt) {
+  evt.preventDefault();
+
+  let profileName = document.querySelector('.profile__name');
+  let profileDescription = document.querySelector('.profile__description');
+
+  profileName.textContent = userName.value;
+  profileDescription.textContent = userInfo.value;
+
+  closePopup();
+}
+
+formElement.addEventListener('submit', handleFormSubmit);

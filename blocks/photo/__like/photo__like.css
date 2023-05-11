@@ -1,0 +1,10 @@
+.photo__like {
+  object-fit: contain;
+  width: 22px;
+  height: 19px;
+  align-self: center;
+}
+
+.photo__like:hover {
+  opacity: 0.6;
+}

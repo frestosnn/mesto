@@ -8,7 +8,7 @@
   height: 74px;
   margin: 45px auto 40px;
   display: flex;
-  align-items: start;
+  justify-content: flex-start;
   border-bottom: 1px solid #545454;
   opacity: 0.7;
 }
@@ -34,7 +34,7 @@
 }
 
 .profile {
-  width: 880px;
+  max-width: 880px;
   margin: 0 auto 50px;
   display: flex;
   align-items: center;
@@ -70,6 +70,12 @@
   margin-right: 244px;
 }
 
+@media screen and (max-width: 1067px) {
+  .profile__info {
+    margin: 0 100px 36px 0;
+  }
+}
+
 @media screen and (max-width: 767px) {
   .profile__info {
     min-width: 282px;
@@ -82,8 +88,7 @@
 }
 
 .profile__name {
-  max-height: 39px;
-  font-family: 'Inter';
+  font-family: 'Inter', Arial, Helvetica, sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 42px;
@@ -107,8 +112,7 @@
 }
 
 .profile__description {
-  max-height: 18px;
-  font-family: 'Inter';
+  font-family: 'Inter', Arial, Helvetica, sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
@@ -144,13 +148,13 @@
 }
 
 .profile__add-button {
-  object-fit: cover;
+  object-fit: contain;
 }
 
 @media screen and (max-width: 767px) {
   .profile__add-button {
     width: 282px;
-    height: 50px;
+    max-height: 50px;
   }
 }
 
@@ -163,9 +167,16 @@
   gap: 20px 17px;
 }
 
+@media screen and (max-width: 1067px) {
+  .photo {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
 @media screen and (max-width: 767px) {
   .photo {
     grid-template-columns: 1fr;
+    margin: 0 auto 48px;
   }
 }
 
@@ -174,6 +185,18 @@
   height: 361px;
   background: #ffffff;
   border-radius: 10px 10px 10px 10px;
+}
+
+@media screen and (max-width: 1067px) {
+  .photo__item {
+    margin: 0 auto;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .photo__item {
+    margin: 0 auto;
+  }
 }
 
 .photo__image {
@@ -190,30 +213,50 @@
 }
 
 .photo__title {
-  font-family: 'Inter';
+  font-family: 'Inter', Arial, Helvetica, sans-serif;
   font-style: normal;
   font-weight: 900;
   font-size: 24px;
   line-height: 29px;
   color: #000000;
   margin: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .footer {
-  width: 318px;
-  height: 18px;
-  margin-left: 200px;
+  max-width: 880px;
   margin-bottom: 60px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  justify-content: flex-start;
+}
+
+@media screen and (max-width: 767px) {
+  .footer {
+    margin-bottom: 36px;
+    max-width: 320px;
+  }
 }
 
 .footer__copyright {
-  font-family: 'Inter';
+  max-width: 318px;
+  font-family: 'Inter', Arial, Helvetica, sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
   line-height: 22px;
   color: #545454;
   margin: 0;
+}
+
+@media screen and (max-width: 767px) {
+  .footer__copyright {
+    font-size: 14px;
+    line-height: 17px;
+  }
 }
 
 .popup {
@@ -234,7 +277,7 @@
   height: 330px;
   position: fixed;
   left: calc((100% - 430px) / 2);
-  top: calc((100% - 430px) / 2);
+  top: calc((100% - 330px) / 2);
   background: #ffffff;
   box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.15);
   border-radius: 10px;
@@ -242,17 +285,85 @@
 }
 
 .popup__title {
-  font-family: 'Inter';
+  font-family: 'Inter', Arial, Helvetica, sans-serif;
   font-style: normal;
   font-weight: 900;
   font-size: 24px;
   line-height: 29px;
   color: #000000;
-  margin: 34px 64px 0 36px;
+  margin: 34px 64px 54px 36px;
   min-width: 330px;
   min-height: 23px;
 }
 
 .popup__opened {
   display: block;
+}
+
+.popup__button-close {
+  width: 32px;
+  height: 32px;
+  position: fixed;
+  top: calc((100% / 2) - 215px);
+  left: calc((100% / 2) + 223px);
+}
+
+.popup__button-close:hover {
+  opacity: 0.6;
+}
+
+.popup__form {
+  border: none;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.popup__input {
+  padding: 0;
+  border: none;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.popup__user-name {
+  width: 358px;
+  height: 27px;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  margin: 0 auto 30px;
+  padding: 0;
+  font-family: 'Inter', Arial, Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  color: #000000;
+}
+
+.popup__user-info {
+  width: 358px;
+  height: 27px;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  margin: 0 auto 48px;
+  padding: 0;
+  font-family: 'Inter', Arial, Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  color: #000000;
+}
+
+.popup__botton-save {
+  width: 358px;
+  height: 50px;
+  margin-bottom: 37px;
+}
+
+.popup__botton-save:hover {
+  background: #000000;
+  opacity: 0.8;
 }

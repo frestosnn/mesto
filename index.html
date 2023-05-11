@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./page/index.css" />
+    <link rel="stylesheet" href="./pages/index.css" />
     <title>Mesto</title>
   </head>
   <body class="page">
@@ -15,21 +15,19 @@
       <section class="profile">
         <img class="profile__avatar" src="./images/Avatar.png" alt="Аватар пользователя" />
         <div class="profile__info">
-          <p class="profile__name">Жак-Ив Кусто</p>
-          <input
+          <h1 class="profile__name">Жак-Ив Кусто</h1>
+          <button
             class="profile__edit-button"
-            type="image"
-            src="./images/editButton.svg"
+            type="button"
             alt="Иконка редакции информации о себе"
-          />
+          ></button>
           <p class="profile__description">Исследователь океана</p>
         </div>
-        <input
+        <button
           class="profile__add-button"
-          type="image"
-          src="./images/addButton.svg"
+          type="button"
           alt="Иконка добавления информации"
-        />
+        ></button>
       </section>
       <section class="photo">
         <div class="photo__item">
@@ -76,10 +74,15 @@
         </div>
       </section>
 
-      <section class="popup">
+      <div class="popup">
         <div class="popup__container">
           <h2 class="popup__title">Редактировать профиль</h2>
-          <form class="popup__form">
+          <button
+            class="popup__button-close"
+            type="button"
+            alt="Иконка закрытия модального окна"
+          ></button>
+          <form class="popup__form" name="popup__form">
             <fieldset class="popup__input">
               <input class="popup__user-name" name="user-name" type="text" value="Жак-Ив Кусто" />
               <input
@@ -88,25 +91,14 @@
                 type="text"
                 value="Исследователь океана"
               />
-              <input
-                class="popup__button-close"
-                type="image"
-                src="./images/closeIcon.svg"
-                alt="Иконка закрытия модального окна"
-              />
             </fieldset>
 
             <fieldset class="popup__input">
-              <input
-                class="popup__botton-save"
-                type="image"
-                src="./images/submitButton.svg"
-                value="Сохранить"
-              />
+              <input class="popup__botton-save" type="submit" value="Сохранить" />
             </fieldset>
           </form>
         </div>
-      </section>
+      </div>
     </main>
     <footer class="footer">
       <p class="footer__copyright">© 2020 Mesto Russia</p>

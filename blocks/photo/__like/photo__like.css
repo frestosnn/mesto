@@ -8,3 +8,7 @@
 .photo__like:hover {
   opacity: 0.6;
 }
+
+.photo__like:active {
+  background: #000000;
+}

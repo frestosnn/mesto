@@ -1,9 +1,9 @@
 .profile__info {
-  min-width: 336px;
+  max-width: 336px;
   margin-right: 244px;
   display: grid;
   grid-template-columns: fit-content(294px) 24px;
-  gap: 18px 16px;
+  gap: 16px 18px;
 }
 
 @media screen and (max-width: 1067px) {
@@ -14,11 +14,12 @@
 
 @media screen and (max-width: 767px) {
   .profile__info {
-    min-width: 282px;
+    display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
+    margin: 0 auto 36px;
     justify-content: center;
-    grid-template-columns: fit-content(196px) 18px;
-    gap: 10px 14px;
-    margin: 0 0 36px 0;
+    gap: 14px 10px;
+    max-width: 282px;
   }
 }

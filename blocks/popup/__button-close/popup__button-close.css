@@ -2,10 +2,15 @@
   width: 32px;
   height: 32px;
   position: absolute;
-  bottom: calc(330px + 8px);
-  left: calc(430px + 8px);
-  z-index: 1;
+  top: -40px;
+  right: -40px;
+  z-index: 200;
   background: url('../../../images/closeIcon.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border: none;
+  padding: 0;
 }
 
 .popup__button-close:hover {
@@ -16,7 +21,7 @@
   .popup__button-close {
     width: 20px;
     height: 20px;
-    bottom: calc(322px + 16px);
-    left: calc(282px - 16px);
+    top: -36px;
+    right: 0;
   }
 }

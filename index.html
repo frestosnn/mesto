@@ -34,42 +34,42 @@
           <img class="photo__image" src="./images/karelia.png" alt="Изображение Карелии" />
           <div class="photo__text-area">
             <h2 class="photo__title">Карелия</h2>
-            <img class="photo__like" src="./images/Group.svg" alt="Изображение иконки лайка" />
+            <button class="photo__like" type="button" alt="Изображение иконки лайка"></button>
           </div>
         </div>
         <div class="photo__item">
           <img class="photo__image" src="./images/baikal.png" alt="Изображение Байкала" />
           <div class="photo__text-area">
             <h2 class="photo__title">Байкал</h2>
-            <img class="photo__like" src="./images/Group.svg" alt="Изображение иконки лайка" />
+            <button class="photo__like" type="button" alt="Изображение иконки лайка"></button>
           </div>
         </div>
         <div class="photo__item">
           <img class="photo__image" src="./images/Dombay.png" alt="Изображение Домбая" />
           <div class="photo__text-area">
             <h2 class="photo__title">Домбай</h2>
-            <img class="photo__like" src="./images/Group.svg" alt="Изображение иконки лайка" />
+            <button class="photo__like" type="button" alt="Изображение иконки лайка"></button>
           </div>
         </div>
         <div class="photo__item">
           <img class="photo__image" src="./images/elbrus.png" alt="Изображение Эльюруса" />
           <div class="photo__text-area">
             <h2 class="photo__title">Эльбрус</h2>
-            <img class="photo__like" src="./images/Group.svg" alt="Изображение иконки лайка" />
+            <button class="photo__like" type="button" alt="Изображение иконки лайка"></button>
           </div>
         </div>
         <div class="photo__item">
           <img class="photo__image" src="./images/altay.png" alt="Изображение Алтая" />
           <div class="photo__text-area">
             <h2 class="photo__title">Алтай</h2>
-            <img class="photo__like" src="./images/Group.svg" alt="Изображение иконки лайка" />
+            <button class="photo__like" type="button" alt="Изображение иконки лайка"></button>
           </div>
         </div>
         <div class="photo__item">
           <img class="photo__image" src="./images/khacassia.png" alt="Изображение Хакасии" />
           <div class="photo__text-area">
             <h2 class="photo__title">Хакасия</h2>
-            <img class="photo__like" src="./images/Group.svg" alt="Изображение иконки лайка" />
+            <button class="photo__like" type="button" alt="Изображение иконки лайка"></button>
           </div>
         </div>
       </section>
@@ -83,18 +83,15 @@
             alt="Иконка закрытия модального окна"
           ></button>
           <form class="popup__form" name="popup__form">
-            <fieldset class="popup__input">
-              <input class="popup__user-name" name="user-name" type="text" value="Жак-Ив Кусто" />
-              <input
-                class="popup__user-info"
-                name="user-info"
-                type="text"
-                value="Исследователь океана"
-              />
+            <fieldset class="popup__wrap">
+              <input class="popup__input popup__input_user-name" name="user-name" type="text" />
+              <input class="popup__input popup__input_user-info" name="user-info" type="text" />
             </fieldset>
 
-            <fieldset class="popup__input">
-              <input class="popup__botton-save" type="submit" value="Сохранить" />
+            <fieldset class="popup__wrap">
+              <button class="popup__button-save" type="submit" alt="Иконка сохранения информации">
+                Сохранить
+              </button>
             </fieldset>
           </form>
         </div>
@@ -103,6 +100,6 @@
     <footer class="footer">
       <p class="footer__copyright">© 2020 Mesto Russia</p>
     </footer>
-    <script src="./script.js"></script>
+    <script src="./scripts/index.js"></script>
   </body>
 </html>

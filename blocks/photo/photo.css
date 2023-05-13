@@ -10,6 +10,7 @@
 @media screen and (max-width: 1067px) {
   .photo {
     grid-template-columns: 1fr 1fr;
+    max-width: 581px;
   }
 }
 

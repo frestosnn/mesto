@@ -6,11 +6,13 @@ let profileName = document.querySelector('.profile__name');
 let profileDescription = document.querySelector('.profile__description');
 
 let formElement = document.querySelector('.popup__form');
-let userName = formElement.querySelector('.popup__input_user-name');
-let userInfo = formElement.querySelector('.popup__input_user-info');
+let userName = formElement.querySelector('.popup__input_user-info_name');
+let userInfo = formElement.querySelector('.popup__input_user-info_job');
 
 function openPopup() {
   //функция открытия попапа
+  userName.value = profileName.textContent; //при открытии попапа там уже находится до этого введенная информация
+  userInfo.value = profileDescription.textContent;
   popup.classList.add('popup_opened');
 }
 
@@ -18,9 +20,6 @@ function closePopup() {
   //функция закрытия попапа
   popup.classList.remove('popup_opened');
 }
-
-userName.value = profileName.textContent; //при открытии попапа там уже находится до этого введенная информация
-userInfo.value = profileDescription.textContent;
 
 function handleFormSubmit(evt) {
   //функция изменения данных профиля

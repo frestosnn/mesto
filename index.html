@@ -21,50 +21,7 @@
         </div>
         <button class="profile__add-button" type="button"></button>
       </section>
-      <section class="photo">
-        <div class="photo__item">
-          <img class="photo__image" src="./images/karelia.png" alt="Изображение Карелии" />
-          <div class="photo__text-area">
-            <h2 class="photo__title">Карелия</h2>
-            <button class="photo__like" type="button"></button>
-          </div>
-        </div>
-        <div class="photo__item">
-          <img class="photo__image" src="./images/baikal.png" alt="Изображение Байкала" />
-          <div class="photo__text-area">
-            <h2 class="photo__title">Байкал</h2>
-            <button class="photo__like" type="button"></button>
-          </div>
-        </div>
-        <div class="photo__item">
-          <img class="photo__image" src="./images/Dombay.png" alt="Изображение Домбая" />
-          <div class="photo__text-area">
-            <h2 class="photo__title">Домбай</h2>
-            <button class="photo__like" type="button"></button>
-          </div>
-        </div>
-        <div class="photo__item">
-          <img class="photo__image" src="./images/elbrus.png" alt="Изображение Эльюруса" />
-          <div class="photo__text-area">
-            <h2 class="photo__title">Эльбрус</h2>
-            <button class="photo__like" type="button"></button>
-          </div>
-        </div>
-        <div class="photo__item">
-          <img class="photo__image" src="./images/altay.png" alt="Изображение Алтая" />
-          <div class="photo__text-area">
-            <h2 class="photo__title">Алтай</h2>
-            <button class="photo__like" type="button"></button>
-          </div>
-        </div>
-        <div class="photo__item">
-          <img class="photo__image" src="./images/khacassia.png" alt="Изображение Хакасии" />
-          <div class="photo__text-area">
-            <h2 class="photo__title">Хакасия</h2>
-            <button class="photo__like" type="button"></button>
-          </div>
-        </div>
-      </section>
+      <section class="photo"></section>
 
       <div class="popup">
         <div class="popup__container">
@@ -94,6 +51,57 @@
           </form>
         </div>
       </div>
+
+      <div class="popup popup_add_photo">
+        <div class="popup__container">
+          <h2 class="popup__title">Новое место</h2>
+          <button class="popup__button-close popup__button-close_popup_edit" type="button"></button>
+          <form class="popup__form popup__form_card_add" name="popup__form-add">
+            <fieldset class="popup__wrap">
+              <input
+                class="popup__input popup__input_place-info_name"
+                name="place-name"
+                type="text"
+                required
+                placeholder="Новое место"
+              />
+              <input
+                class="popup__input popup__input_place-info_url"
+                name="place-url"
+                type="text"
+                required
+                placeholder="Ссылка на картинку"
+              />
+            </fieldset>
+
+            <fieldset class="popup__wrap">
+              <button class="popup__button-save" type="submit">Создать</button>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+
+      <div class="popup popup_photo_open">
+        <div class="popup__container popup__container_photo_full">
+          <button
+            class="popup__button-close popup__button-close_popup_add-photo"
+            type="button"
+          ></button>
+          <img class="img" />
+          <h1 class="title"></h1>
+        </div>
+      </div>
+
+      <template id="photo-template">
+        <div class="photo__item">
+          <img class="photo__image" />
+          <button class="photo__delete" type="button"></button>
+          <div class="photo__text-area">
+            <h2 class="photo__title"></h2>
+            <button class="photo__like"></button>
+          </div>
+        </div>
+      </template>
     </main>
     <footer class="footer">
       <p class="footer__copyright">© 2020 Mesto Russia</p>

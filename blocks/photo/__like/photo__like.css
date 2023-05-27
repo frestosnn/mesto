@@ -1,5 +1,4 @@
 .photo__like {
-  object-fit: contain;
   width: 22px;
   height: 19px;
   align-self: center;
@@ -14,6 +13,6 @@
   opacity: 0.5;
 }
 
-.photo__like:active {
-  background: #000000;
+.active {
+  background: url('../../../images/Union.svg');
 }

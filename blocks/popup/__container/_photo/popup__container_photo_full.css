@@ -1,0 +1,31 @@
+.popup__container_photo_full {
+  max-width: 75%;
+  max-width: 75%;
+  border-radius: 0;
+}
+
+.img {
+  z-index: 1000000;
+  width: 100%;
+  width: 100%;
+}
+
+.title {
+  color: red;
+  font-size: 30px;
+  z-index: 10000;
+}
+
+.photo__delete {
+  background-image: url('../../../../images/Trash.png');
+  width: 18px;
+  height: 19px;
+  border: none;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 10;
+}

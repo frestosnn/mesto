@@ -1,8 +1,7 @@
-.popup__container_photo_full {
+.popupImg__container {
+  position: relative;
   display: flex;
   justify-content: center;
-  background: none;
   max-width: 75vw;
   max-height: 75vh;
-  position: relative;
 }

@@ -120,10 +120,10 @@ function createCards(el) {
     сard.remove();
   });
 
-  const imgBigTitle = document.querySelector('.popup__photo-title');
-  const imgBig = document.querySelector('.popup__img'); //поиск картинки и названия в попапе
+  const imgBigTitle = document.querySelector('.popupImg__photo-title');
+  const imgBig = document.querySelector('.popupImg__img'); //поиск картинки и названия в попапе
   const popupOpenPhoto = document.querySelector('.popupImg'); //находим попап открытия фото
-  const popupCloseButton = document.querySelector('.popup__button-close_popup_add-photo'); //находим кнопку закрытия для фото-карточек
+  const popupCloseButton = document.querySelector('.popupImg__button-close'); //находим кнопку закрытия для фото-карточек
   initCardImg.addEventListener('click', function (event) {
     openPopup(popupOpenPhoto); //при клике на каждую картинку открывается попап
     imgBig.src = initCardImg.src;

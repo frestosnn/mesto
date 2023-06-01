@@ -141,7 +141,7 @@ const placeUrl = document.querySelector('.popup__input_place-info_url');
 formAddPhoto.addEventListener('submit', function (evt) {
   //сохранение данных, добавление карточек и закрытия попапа
   evt.preventDefault();
-  const newCard = createCards({ name: placeName.value, link: placeUrl.value }); //добавили новую карточку как объект со значениями из инпутов в функцию создания карточек
+  const newCard = createCard({ name: placeName.value, link: placeUrl.value }); //добавили новую карточку как объект со значениями из инпутов в функцию создания карточек
   photoSection.prepend(newCard);
 
   closePopup(popupAddPhoto);

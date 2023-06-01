@@ -1,11 +1,11 @@
-let popup = document.querySelector('.popup');
-let editBotton = document.querySelector('.profile__edit-button');
-let closeButton = document.querySelector('.popup__button-close');
-let profileName = document.querySelector('.profile__name');
-let profileDescription = document.querySelector('.profile__description');
-let formElement = document.querySelector('.popup__form');
-let userName = formElement.querySelector('.popup__input_user-info_name');
-let userInfo = formElement.querySelector('.popup__input_user-info_job');
+const popupEdit = document.querySelector('.popup_add_edit');
+const editBotton = document.querySelector('.profile__edit-button');
+const closeButton = document.querySelector('.popup__button-close');
+const profileName = document.querySelector('.profile__name');
+const profileDescription = document.querySelector('.profile__description');
+const formElement = document.querySelector('.popup__form');
+const userName = formElement.querySelector('.popup__input_user-info_name');
+const userInfo = formElement.querySelector('.popup__input_user-info_job');
 
 userName.value = profileName.textContent; //при открытии попапа там уже находится до этого введенная информация
 userInfo.value = profileDescription.textContent;
@@ -27,17 +27,17 @@ function handleFormSubmit(evt) {
   profileName.textContent = userName.value;
   profileDescription.textContent = userInfo.value;
 
-  closePopup(popup);
+  closePopup(popupEdit);
 }
 
 formElement.addEventListener('submit', handleFormSubmit); //слушатели событий для отправки формы и открытия/закрытия попапа
 
 editBotton.addEventListener('click', function () {
-  openPopup(popup);
+  openPopup(popupEdit);
 });
 
 closeButton.addEventListener('click', function () {
-  closePopup(popup);
+  closePopup(popupEdit);
 });
 
 ///////////////////////////ПОПАП-ДОБАВЛЕНИЯ КАРТОЧЕК
@@ -91,58 +91,56 @@ const initialCards = [
 ];
 
 initialCards.forEach(function (item) {
-  const newCards = createCards(item);
-  photoSection.prepend(newCards); //добавляем на страницу карточки из массива
+  const newCard = createCard(item);
+  photoSection.prepend(newCard); //добавляем на страницу карточки из массива
 });
 
-function createCards(el) {
+function createCard(el) {
   const initCard = card.cloneNode(true);
 
   const initCardImg = initCard.querySelector('.photo__image'); //копируем элементы внутри: картинка, надпись, лайк, удаление
   const initCardTextArea = initCard.querySelector('.photo__text-area');
   const initCardTitle = initCard.querySelector('.photo__title');
-  const initCardLike = initCard.querySelector('.photo__like');
-  const initCardDelete = initCard.querySelector('.photo__delete');
+  const initCardLike = initCard.querySelector('.photo__like'); //находим кнопку Лайка на странице
+  const initCardDelete = initCard.querySelector('.photo__delete'); //ищем кнопки удалить
 
   initCardTitle.textContent = el.name; //присваиваем значения для карточек
   initCardImg.src = el.link;
 
-  const buttonLike = initCard.querySelector('.photo__like'); //находим кнопку Лайка на странице
-  buttonLike.addEventListener('click', function () {
+  initCardLike.addEventListener('click', function () {
     //будет добавляться или удаляться класс при помощи слушателя событий
-    buttonLike.classList.toggle('active');
+    initCardLike.classList.toggle('active');
   });
 
-  const buttonDelete = initCard.querySelector('.photo__delete'); //ищем кнопки удалить
-  buttonDelete.addEventListener('click', function () {
+  initCardDelete.addEventListener('click', function () {
     //на каждую кнопку вешаем слушатель событий на клик
-    const сard = buttonDelete.closest('.photo__item'); //используем метод closest, чтобы удалить именно родительский элемент, кликнутой кнопки
+    const сard = initCardDelete.closest('.photo__item'); //используем метод closest, чтобы удалить именно родительский элемент, кликнутой кнопки
     сard.remove();
   });
 
-  const imgBigTitle = document.querySelector('.popupImg__photo-title');
-  const imgBig = document.querySelector('.popupImg__img'); //поиск картинки и названия в попапе
-  const popupOpenPhoto = document.querySelector('.popupImg'); //находим попап открытия фото
-  const popupCloseButton = document.querySelector('.popupImg__button-close'); //находим кнопку закрытия для фото-карточек
   initCardImg.addEventListener('click', function (event) {
     openPopup(popupOpenPhoto); //при клике на каждую картинку открывается попап
     imgBig.src = initCardImg.src;
     imgBigTitle.textContent = initCardTitle.textContent;
   });
 
-  popupCloseButton.addEventListener('click', function () {
-    closePopup(popupOpenPhoto); //при клике на закрыть - попап закрывается!
-  });
-
   return initCard;
 }
+
+const imgBigTitle = document.querySelector('.popup__photo-title');
+const imgBig = document.querySelector('.popup__img'); //поиск картинки и названия в попапе
+const popupOpenPhoto = document.querySelector('.popup_add_big-photo'); //находим попап открытия фото
+const popupCloseButton = document.querySelector('.popup__button-close_popup_zoom'); //находим кнопку закрытия для фото-карточек
+popupCloseButton.addEventListener('click', function () {
+  closePopup(popupOpenPhoto); //при клике на закрыть - попап закрывается!
+});
+
+const placeName = document.querySelector('.popup__input_place-info_name'); //нашли формы ввода
+const placeUrl = document.querySelector('.popup__input_place-info_url');
 
 formAddPhoto.addEventListener('submit', function (evt) {
   //сохранение данных, добавление карточек и закрытия попапа
   evt.preventDefault();
-  const placeName = document.querySelector('.popup__input_place-info_name'); //нашли формы ввода
-  const placeUrl = document.querySelector('.popup__input_place-info_url');
-
   const newCard = createCards({ name: placeName.value, link: placeUrl.value }); //добавили новую карточку как объект со значениями из инпутов в функцию создания карточек
   photoSection.prepend(newCard);
 

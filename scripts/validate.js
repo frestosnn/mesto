@@ -3,14 +3,14 @@ function showInputError(formEl, inputEl, errorMessage) {
   const errorElement = formEl.querySelector(`.${inputEl.id}-error`); //ищем место, где будет текст ошибки
   inputEl.classList.add('popup__input_type_error'); //добавляем инпуту стили, то есть красный бордер
   errorElement.textContent = errorMessage; //текст ошибки = встренному тексту ошибок JS
-  errorElement.classList.add('form__input-error_active'); //добавляем ему стили
+  errorElement.classList.add('popup__error_visible'); //добавляем ему стили
 }
 
 function hideInputError(formEl, inputEl) {
   //функция прячущая ошибку, принимает конкретную форму и инпут в этой форме
   const errorElement = formEl.querySelector(`.${inputEl.id}-error`); //ищем место в HTML где будет текст ошибки
   inputEl.classList.remove('popup__input_type_error'); //из инпута удаляем класс ошибки, то есть красный бордер
-  errorElement.classList.remove('form__input-error_active'); //удаляем стили ошибки
+  errorElement.classList.remove('popup__error_visible'); //удаляем стили ошибки
   errorElement.textContent = ''; //очищаем текст ошибки
 }
 

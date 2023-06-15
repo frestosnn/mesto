@@ -28,34 +28,30 @@
           <h2 class="popup__title">Редактировать профиль</h2>
           <button class="popup__button-close" type="button"></button>
           <form class="popup__form" name="formEdit" novalidate>
-            <fieldset class="popup__wrap">
-              <input
-                id="user-name-input"
-                class="popup__input popup__input_user-info_name"
-                name="userName"
-                type="text"
-                required
-                placeholder="Имя"
-                minlength="2"
-                maxlength="40"
-              />
-              <span class="user-name-input-error form__input-error"></span>
-              <input
-                id="user-job-input"
-                class="popup__input popup__input_user-info_job"
-                name="userInfo"
-                type="text"
-                required
-                placeholder="Профессия"
-                minlength="2"
-                maxlength="200"
-              />
-              <span class="user-job-input-error form__input-error"></span>
-            </fieldset>
+            <input
+              id="user-name-input"
+              class="popup__input popup__input_user-info_name"
+              name="userName"
+              type="text"
+              required
+              placeholder="Имя"
+              minlength="2"
+              maxlength="40"
+            />
+            <span class="user-name-input-error popup__error"></span>
+            <input
+              id="user-job-input"
+              class="popup__input popup__input_user-info_job"
+              name="userInfo"
+              type="text"
+              required
+              placeholder="Профессия"
+              minlength="2"
+              maxlength="200"
+            />
+            <span class="user-job-input-error popup__error"></span>
 
-            <fieldset class="popup__wrap">
-              <button class="popup__button-save" type="submit">Сохранить</button>
-            </fieldset>
+            <button class="popup__button-save" type="submit">Сохранить</button>
           </form>
         </div>
       </div>
@@ -65,30 +61,26 @@
           <h2 class="popup__title">Новое место</h2>
           <button class="popup__button-close popup__button-close_popup_edit" type="button"></button>
           <form class="popup__form popup__form_card_add" name="formAdd" novalidate>
-            <fieldset class="popup__wrap">
-              <input
-                id="place-name-input"
-                class="popup__input popup__input_place-info_name"
-                name="place-name"
-                type="text"
-                required
-                placeholder="Новое место"
-              />
-              <span class="place-name-input-error form__input-error"></span>
-              <input
-                id="place-url-input"
-                class="popup__input popup__input_place-info_url"
-                name="place-url"
-                type="url"
-                required
-                placeholder="Ссылка на картинку"
-              />
-              <span class="place-url-input-error form__input-error"></span>
-            </fieldset>
+            <input
+              id="place-name-input"
+              class="popup__input popup__input_place-info_name"
+              name="place-name"
+              type="text"
+              required
+              placeholder="Новое место"
+            />
+            <span class="place-name-input-error popup__error"></span>
+            <input
+              id="place-url-input"
+              class="popup__input popup__input_place-info_url"
+              name="place-url"
+              type="url"
+              required
+              placeholder="Ссылка на картинку"
+            />
+            <span class="place-url-input-error popup__error"></span>
 
-            <fieldset class="popup__wrap">
-              <button class="popup__button-save" type="submit">Создать</button>
-            </fieldset>
+            <button class="popup__button-save" type="submit">Создать</button>
           </form>
         </div>
       </div>

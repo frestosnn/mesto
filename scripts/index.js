@@ -7,8 +7,36 @@ const formElement = document.querySelector('.popup__form');
 const userName = formElement.querySelector('.popup__input_user-info_name');
 const userInfo = formElement.querySelector('.popup__input_user-info_job');
 
-userName.value = profileName.textContent; //при открытии попапа там уже находится до этого введенная информация
-userInfo.value = profileDescription.textContent;
+function valueInside() {
+  userName.value = profileName.textContent; //при открытии попапа там уже находится до этого введенная информация
+  userInfo.value = profileDescription.textContent;
+}
+
+const spanList = document.querySelectorAll('.popup__error'); //находим все ошибки
+function removeError() {
+  //функция удаления ошибок
+  spanList.forEach(function (el) {
+    el.classList.remove('popup__error_visible'); //удаляем стили ошибки
+    el.textContent = ''; //очищаем текст ошибки
+  });
+}
+
+const inputList = document.querySelectorAll('.popup__input'); //находим все инпуты
+function removeBorder() {
+  //функция удаления красных бордеров
+  inputList.forEach(function (el) {
+    el.classList.remove('popup__input_type_error'); //из инпута удаляем класс ошибки, то есть красный бордер
+  });
+}
+
+const buttonList = document.querySelectorAll('.popup__button-save'); //находим все кнопки сохранить
+function removeButton() {
+  //функция инактивации кнопок
+  buttonList.forEach(function (el) {
+    el.setAttribute('disabled', true); //добавить неактивный добавить атрибут
+    el.classList.add('popup__button-save_disabled');
+  });
+}
 
 function openPopup(popupEl) {
   //функция открытия попапа
@@ -18,6 +46,8 @@ function openPopup(popupEl) {
 function closePopup(popupEl) {
   //функция закрытия попапа
   popupEl.classList.remove('popup_opened');
+  removeError(); //удаляются ошибки
+  removeBorder(); //и удаляются границы при закрытии попапов
 }
 
 function handleFormSubmit(evt) {
@@ -34,6 +64,7 @@ formElement.addEventListener('submit', handleFormSubmit); //слушатели �
 
 editBotton.addEventListener('click', function () {
   openPopup(popupEdit);
+  valueInside(); //функция, которая добавляет данные, введенные пользователем, обратно в инпут
 });
 
 closeButton.addEventListener('click', function () {
@@ -51,6 +82,7 @@ addButton.addEventListener('click', function () {
   //слушатель событий для открытия попапа добавления фотокарточек
   openPopup(popupAddPhoto);
 });
+
 closeButtonAdd.addEventListener('click', function () {
   closePopup(popupAddPhoto);
 });
@@ -145,4 +177,31 @@ formAddPhoto.addEventListener('submit', function (evt) {
   photoSection.prepend(newCard);
 
   closePopup(popupAddPhoto);
+
+  formAddPhoto.reset();
+  removeButton();
+});
+
+const popupList = document.querySelectorAll('.popup'); //ищем все попапы на странице
+
+popupList.forEach(function (item) {
+  document.addEventListener('keydown', function (event) {
+    //добавляем на весь документ слушатель событий
+    if (event.key === 'Escape') {
+      //если нажата клавиша Esc
+      closePopup(item); //закрыть попап
+      formAddPhoto.reset(); //удаление всех введенных данных, введенных пользователем
+    }
+  });
+});
+
+popupList.forEach(function (item) {
+  item.addEventListener('click', function (event) {
+    //добавляем слушатель на оверлей, то есть, оверлей это теперь CurrentTarget
+    if (event.target === event.currentTarget) {
+      //если то, куда я нажала === CurrentTarget (то есть оверлей)
+      closePopup(item); //то закрыть попап
+      formAddPhoto.reset(); //удаление всех введенных данных, введенных пользователем
+    }
+  });
 });

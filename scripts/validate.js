@@ -30,11 +30,17 @@ function isValid(formEl, inputEl) {
 function setEventListeners(formEl) {
   //функция для проверки корректности инпутов
   const inputList = Array.from(formEl.querySelectorAll('.popup__input')); //находим все инпуты в определенной форме
+  const buttonEl = formEl.querySelector('.popup__button-save'); //нашли кнопку сохранить именно в конкретной форме
+
+  toggleButtonState(inputList, buttonEl); //сразу вызываем функцию, не дожидаясь когда пользователь введет что-то, а значит кнопка при первом открытии попапа будет не валидной
+
   inputList.forEach(function (inputEl) {
     //для каждого инпута добавляем слушатель
     inputEl.addEventListener('input', () => {
       //функция isValid проверяем валидный ли код в каждом конкретном инпуте (то есть, для всех инпутов по очереди) в одной форме
       isValid(formEl, inputEl);
+
+      toggleButtonState(inputList, buttonEl); //вызываем функцию переключения состояния кнопки, в которой лежит функция проверки валидны ли все инпуты одновременно
     });
   });
 }
@@ -48,4 +54,32 @@ function enableValidation() {
   });
 }
 
-enableValidation();
+function hasInvalidInput(inputList) {
+  //проверка всех инпутов на валидность
+  //принимает массив полей ввода
+  return inputList.some(function (inputEl) {
+    //проходим по массиву методом some, он возвращает true если поля прошли валидацию
+    return !inputEl.validity.valid; //если не прошло, вернуть false
+  });
+}
+
+function toggleButtonState(inputList, buttonEl) {
+  //приниамает массив полей ввода и кнопку сохранить
+  if (hasInvalidInput(inputList)) {
+    //если проверка инпутов возвращает false
+    buttonEl.setAttribute('disabled', true); //добавить неактивный добавить атрибут
+    buttonEl.classList.add('popup__button-save_disabled');
+  } else {
+    buttonEl.removeAttribute('disabled'); //если все инпуты true - удалить атрибут
+    buttonEl.classList.remove('popup__button-save_disabled');
+  }
+}
+
+enableValidation({
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button-save',
+  inactiveButtonClass: '.popup__button-save_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__error_visible'
+});

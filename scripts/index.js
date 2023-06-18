@@ -38,34 +38,36 @@ function disableButton() {
   });
 }
 
-const popupList = document.querySelectorAll('.popup'); //ищем все попапы на странице
+function closeByEsc(event) {
+  if (event.key === 'Escape') {
+    const openedPopup = document.querySelector('.popup_opened');
+    closePopup(openedPopup);
+  }
+}
 
-function closeByEsc() {
-  popupList.forEach(function (item) {
-    document.addEventListener('keydown', function (event) {
-      //добавляем на весь документ слушатель событий
-      if (event.key === 'Escape') {
-        //если нажата клавиша Esc
-        closePopup(item); //закрыть попап
-        formAddPhoto.reset(); //удаление всех введенных данных, введенных пользователем
-        disableButton();
-      }
-    });
-  });
+function closeByOverlay(event) {
+  if (event.target === event.currentTarget) {
+    const openedPopup = document.querySelector('.popup_opened');
+    closePopup(openedPopup);
+  }
 }
 
 function openPopup(popupEl) {
   //функция открытия попапа
   popupEl.classList.add('popup_opened');
-  closeByEsc();
+  document.addEventListener('keydown', closeByEsc);
+  popupEl.addEventListener('click', closeByOverlay);
 }
 
 function closePopup(popupEl) {
   //функция закрытия попапа
   popupEl.classList.remove('popup_opened');
   document.removeEventListener('keydown', closeByEsc);
+  popupEl.removeEventListener('click', closeByOverlay);
   removeError(); //удаляются ошибки
   removeBorder(); //и удаляются границы при закрытии попапов
+  disableButton(); //кнопка неактивна
+  formAddPhoto.reset(); //удаление всех введенных данных, введенных пользователем именно в форме добавления карточек
 }
 
 function handleFormSubmit(evt) {
@@ -81,10 +83,11 @@ function handleFormSubmit(evt) {
 formEdit.addEventListener('submit', handleFormSubmit); //слушатели событий для отправки формы и открытия/закрытия попапа
 
 const buttonSave = formEdit.querySelector('.popup__button-save');
+
 editBotton.addEventListener('click', function () {
   openPopup(popupEdit);
   valueInside(); //функция, которая добавляет данные, введенные пользователем, обратно в инпут
-  buttonSave.removeAttribute('disabled'); //при открытии попапа удаляются классы для кнопкиco
+  buttonSave.removeAttribute('disabled'); //при открытии попапа удаляются классы для кнопки сохранить
   buttonSave.classList.remove('popup__button-save_disabled');
 });
 
@@ -106,8 +109,6 @@ addButton.addEventListener('click', function () {
 
 closeButtonAdd.addEventListener('click', function () {
   closePopup(popupAddPhoto);
-  formAddPhoto.reset();
-  disableButton();
 });
 
 //////////////////ДОБАВЛЕНИЕ КАРТОЧЕК
@@ -202,19 +203,4 @@ formAddPhoto.addEventListener('submit', function (evt) {
   photoSection.prepend(newCard);
 
   closePopup(popupAddPhoto);
-
-  formAddPhoto.reset();
-  disableButton();
-});
-
-popupList.forEach(function (item) {
-  item.addEventListener('click', function (event) {
-    //добавляем слушатель на оверлей, то есть, оверлей это теперь CurrentTarget
-    if (event.target === event.currentTarget) {
-      //если то, куда я нажала === CurrentTarget (то есть оверлей)
-      closePopup(item); //то закрыть попап
-      formAddPhoto.reset(); //удаление всех введенных данных, введенных пользователем
-      disableButton();
-    }
-  });
 });

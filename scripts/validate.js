@@ -1,16 +1,16 @@
 function showInputError(formEl, inputEl, errorMessage) {
   //функция добавления ошибки, принимает конкретную форму и инпут в этой форме, а так же текст ошибки (это объект в JS)
   const errorElement = formEl.querySelector(`.${inputEl.id}-error`); //ищем место, где будет текст ошибки
-  inputEl.classList.add('popup__input_type_error'); //добавляем инпуту стили, то есть красный бордер
+  inputEl.classList.add(`${configClasses.inputErrorClass}`); //добавляем инпуту стили, то есть красный бордер
   errorElement.textContent = errorMessage; //текст ошибки = встренному тексту ошибок JS
-  errorElement.classList.add('popup__error_visible'); //добавляем ему стили
+  errorElement.classList.add(`${configClasses.errorClass}`); //добавляем ему стили
 }
 
 function hideInputError(formEl, inputEl) {
   //функция прячущая ошибку, принимает конкретную форму и инпут в этой форме
   const errorElement = formEl.querySelector(`.${inputEl.id}-error`); //ищем место в HTML где будет текст ошибки
-  inputEl.classList.remove('popup__input_type_error'); //из инпута удаляем класс ошибки, то есть красный бордер
-  errorElement.classList.remove('popup__error_visible'); //удаляем стили ошибки
+  inputEl.classList.remove(`${configClasses.inputErrorClass}`); //из инпута удаляем класс ошибки, то есть красный бордер
+  errorElement.classList.remove(`${configClasses.errorClass}`); //удаляем стили ошибки
   errorElement.textContent = ''; //очищаем текст ошибки
 }
 
@@ -29,8 +29,8 @@ function isValid(formEl, inputEl) {
 
 function setEventListeners(formEl) {
   //функция для проверки корректности инпутов
-  const inputList = Array.from(formEl.querySelectorAll('.popup__input')); //находим все инпуты в определенной форме
-  const buttonEl = formEl.querySelector('.popup__button-save'); //нашли кнопку сохранить именно в конкретной форме
+  const inputList = Array.from(formEl.querySelectorAll(`${configClasses.inputSelector}`)); //находим все инпуты в определенной форме
+  const buttonEl = formEl.querySelector(`${configClasses.submitButtonSelector}`); //нашли кнопку сохранить именно в конкретной форме
 
   toggleButtonState(inputList, buttonEl); //сразу вызываем функцию, не дожидаясь когда пользователь введет что-то, а значит кнопка при первом открытии попапа будет не валидной
 
@@ -45,9 +45,9 @@ function setEventListeners(formEl) {
   });
 }
 
-function enableValidation() {
+function enableValidation(configClasses) {
   //функция собирающая со строницы все формы
-  const formList = Array.from(document.querySelectorAll('.popup__form')); //ищем все формы и делаем их массивом
+  const formList = Array.from(document.querySelectorAll(`${configClasses.formSelector}`)); //ищем все формы и делаем их массивом
   formList.forEach(function (formEl) {
     //для каждой формы вызываем функцию setEventListners
     setEventListeners(formEl);
@@ -68,18 +68,20 @@ function toggleButtonState(inputList, buttonEl) {
   if (hasInvalidInput(inputList)) {
     //если проверка инпутов возвращает false
     buttonEl.setAttribute('disabled', true); //добавить неактивный добавить атрибут
-    buttonEl.classList.add('popup__button-save_disabled');
+    buttonEl.classList.add(`${configClasses.inactiveButtonClass}`);
   } else {
     buttonEl.removeAttribute('disabled'); //если все инпуты true - удалить атрибут
-    buttonEl.classList.remove('popup__button-save_disabled');
+    buttonEl.classList.remove(`${configClasses.inactiveButtonClass}`);
   }
 }
 
-enableValidation({
+const configClasses = {
   formSelector: '.popup__form',
   inputSelector: '.popup__input',
   submitButtonSelector: '.popup__button-save',
-  inactiveButtonClass: '.popup__button-save_disabled',
+  inactiveButtonClass: 'popup__button-save_disabled',
   inputErrorClass: 'popup__input_type_error',
   errorClass: 'popup__error_visible'
-});
+};
+
+enableValidation(configClasses);

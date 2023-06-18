@@ -1,11 +1,11 @@
 const popupEdit = document.querySelector('.popup_add_edit');
 const editBotton = document.querySelector('.profile__edit-button');
-const closeButton = document.querySelector('.popup__button-close');
+const closePopupButton = popupEdit.querySelector('.popup__button-close');
 const profileName = document.querySelector('.profile__name');
 const profileDescription = document.querySelector('.profile__description');
-const formElement = document.querySelector('.popup__form');
-const userName = formElement.querySelector('.popup__input_user-info_name');
-const userInfo = formElement.querySelector('.popup__input_user-info_job');
+const formEdit = popupEdit.querySelector('.popup__form');
+const userName = formEdit.querySelector('.popup__input_user-info_name');
+const userInfo = formEdit.querySelector('.popup__input_user-info_job');
 
 function valueInside() {
   userName.value = profileName.textContent; //при открытии попапа там уже находится до этого введенная информация
@@ -29,23 +29,41 @@ function removeBorder() {
   });
 }
 
-const buttonList = document.querySelectorAll('.popup__button-save'); //находим все кнопки сохранить
-function removeButton() {
+const buttonSaveList = document.querySelectorAll('.popup__button-save'); //находим все кнопки сохранить
+function disableButton() {
   //функция инактивации кнопок
-  buttonList.forEach(function (el) {
+  buttonSaveList.forEach(function (el) {
     el.setAttribute('disabled', true); //добавить неактивный добавить атрибут
     el.classList.add('popup__button-save_disabled');
+  });
+}
+
+const popupList = document.querySelectorAll('.popup'); //ищем все попапы на странице
+
+function closeByEsc() {
+  popupList.forEach(function (item) {
+    document.addEventListener('keydown', function (event) {
+      //добавляем на весь документ слушатель событий
+      if (event.key === 'Escape') {
+        //если нажата клавиша Esc
+        closePopup(item); //закрыть попап
+        formAddPhoto.reset(); //удаление всех введенных данных, введенных пользователем
+        disableButton();
+      }
+    });
   });
 }
 
 function openPopup(popupEl) {
   //функция открытия попапа
   popupEl.classList.add('popup_opened');
+  closeByEsc();
 }
 
 function closePopup(popupEl) {
   //функция закрытия попапа
   popupEl.classList.remove('popup_opened');
+  document.removeEventListener('keydown', closeByEsc);
   removeError(); //удаляются ошибки
   removeBorder(); //и удаляются границы при закрытии попапов
 }
@@ -60,14 +78,17 @@ function handleFormSubmit(evt) {
   closePopup(popupEdit);
 }
 
-formElement.addEventListener('submit', handleFormSubmit); //слушатели событий для отправки формы и открытия/закрытия попапа
+formEdit.addEventListener('submit', handleFormSubmit); //слушатели событий для отправки формы и открытия/закрытия попапа
 
+const buttonSave = formEdit.querySelector('.popup__button-save');
 editBotton.addEventListener('click', function () {
   openPopup(popupEdit);
   valueInside(); //функция, которая добавляет данные, введенные пользователем, обратно в инпут
+  buttonSave.removeAttribute('disabled'); //при открытии попапа удаляются классы для кнопкиco
+  buttonSave.classList.remove('popup__button-save_disabled');
 });
 
-closeButton.addEventListener('click', function () {
+closePopupButton.addEventListener('click', function () {
   closePopup(popupEdit);
 });
 
@@ -85,6 +106,8 @@ addButton.addEventListener('click', function () {
 
 closeButtonAdd.addEventListener('click', function () {
   closePopup(popupAddPhoto);
+  formAddPhoto.reset();
+  disableButton();
 });
 
 //////////////////ДОБАВЛЕНИЕ КАРТОЧЕК
@@ -138,6 +161,7 @@ function createCard(el) {
 
   initCardTitle.textContent = el.name; //присваиваем значения для карточек
   initCardImg.src = el.link;
+  initCardImg.alt = el.name;
 
   initCardLike.addEventListener('click', function () {
     //будет добавляться или удаляться класс при помощи слушателя событий
@@ -154,6 +178,7 @@ function createCard(el) {
     openPopup(popupOpenPhoto); //при клике на каждую картинку открывается попап
     imgBig.src = initCardImg.src;
     imgBigTitle.textContent = initCardTitle.textContent;
+    imgBig.alt = initCardTitle.textContent;
   });
 
   return initCard;
@@ -179,20 +204,7 @@ formAddPhoto.addEventListener('submit', function (evt) {
   closePopup(popupAddPhoto);
 
   formAddPhoto.reset();
-  removeButton();
-});
-
-const popupList = document.querySelectorAll('.popup'); //ищем все попапы на странице
-
-popupList.forEach(function (item) {
-  document.addEventListener('keydown', function (event) {
-    //добавляем на весь документ слушатель событий
-    if (event.key === 'Escape') {
-      //если нажата клавиша Esc
-      closePopup(item); //закрыть попап
-      formAddPhoto.reset(); //удаление всех введенных данных, введенных пользователем
-    }
-  });
+  disableButton();
 });
 
 popupList.forEach(function (item) {
@@ -202,6 +214,7 @@ popupList.forEach(function (item) {
       //если то, куда я нажала === CurrentTarget (то есть оверлей)
       closePopup(item); //то закрыть попап
       formAddPhoto.reset(); //удаление всех введенных данных, введенных пользователем
+      disableButton();
     }
   });
 });

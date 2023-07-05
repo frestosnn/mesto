@@ -1,81 +1,89 @@
-function showInputError(formEl, inputEl, errorMessage) {
-  //функция добавления ошибки, принимает конкретную форму и инпут в этой форме, а так же текст ошибки (это объект в JS)
-  const errorElement = formEl.querySelector(`.${inputEl.id}-error`); //ищем место, где будет текст ошибки
-  inputEl.classList.add(`${configClasses.inputErrorClass}`); //добавляем инпуту стили, то есть красный бордер
-  errorElement.textContent = errorMessage; //текст ошибки = встренному тексту ошибок JS
-  errorElement.classList.add(`${configClasses.errorClass}`); //добавляем ему стили
-}
+export class FormValidator {
+  constructor(validators, formEl) {
+    this.validators = validators;
+    this.formEl = formEl;
 
-function hideInputError(formEl, inputEl) {
-  //функция прячущая ошибку, принимает конкретную форму и инпут в этой форме
-  const errorElement = formEl.querySelector(`.${inputEl.id}-error`); //ищем место в HTML где будет текст ошибки
-  inputEl.classList.remove(`${configClasses.inputErrorClass}`); //из инпута удаляем класс ошибки, то есть красный бордер
-  errorElement.classList.remove(`${configClasses.errorClass}`); //удаляем стили ошибки
-  errorElement.textContent = ''; //очищаем текст ошибки
-}
+    //находим кнопку сохранить в проверяемой форме
+    this.buttonEl = this.formEl.querySelector(this.validators.submitButtonSelector);
 
-function isValid(formEl, inputEl) {
-  //функция проверяющая валидность данных
-  if (!inputEl.validity.valid) {
-    //если в инпуте в объекте validity ключ valid === false
-    showInputError(formEl, inputEl, inputEl.validationMessage); //то вызываем функцию показать ошибку в конкретной форме в этом инпуте
-  } else {
-    //если valid === true, то спрятать ошибку в конкретной форме в этом инпуте
-    hideInputError(formEl, inputEl);
+    //находим все инпуты в проверяемой форме
+    this.inputList = Array.from(this.formEl.querySelectorAll(this.validators.inputSelector));
   }
-}
 
-//эти две функции работают так: перебираем все формы на странице и для каждой формы по очереди вызывается функция setEventListners. Эта функция в свою очередь перебирает в одной форме все инпуты (то есть, в конкретной форме1 перебирает её инпуты например инпут1 инпут2 инпут3 инпут4) и проверяет валидность данных инпутов. Но из-за того, что enableValidation ищет все формы на странице и применяет метод forEach, то далее после проверки формы1, идет проверка формы2 и т.д.. И для формы2 весь цикл повторяется(то есть, уже в форме2 ищутся её конкретные инпуты - инпут1 инпут2 инпут3 с помощью функции setEventListners)
+  //функция добавления ошибки в инпут
+  _showInputError(inputEl, errorMessage) {
+    const errorElement = this.formEl.querySelector(`.${inputEl.id}-error`); //ищем место, где будет текст ошибки
+    inputEl.classList.add(this.validators.inputErrorClass); //добавляем инпуту стили, то есть красный бордер
+    errorElement.textContent = errorMessage; //текст ошибки = встренному тексту ошибок JS
+    errorElement.classList.add(this.validators.errorClass); //добавляем ему стили
+  }
 
-function setEventListeners(formEl) {
+  //функция скрывания ошибки
+  _hideInputError(inputEl) {
+    const errorElement = this.formEl.querySelector(`.${inputEl.id}-error`); //ищем место в HTML где будет текст ошибки
+    inputEl.classList.remove(this.validators.inputErrorClass); //из инпута удаляем класс ошибки, то есть красный бордер
+    errorElement.classList.remove(this.validators.errorClass); //удаляем стили ошибки
+    errorElement.textContent = ''; //очищаем текст ошибки
+  }
+
   //функция для проверки корректности инпутов
-  const inputList = Array.from(formEl.querySelectorAll(`${configClasses.inputSelector}`)); //находим все инпуты в определенной форме
-  const buttonEl = formEl.querySelector(`${configClasses.submitButtonSelector}`); //нашли кнопку сохранить именно в конкретной форме
+  _setEventListeners() {
+    //сразу вызываем функцию, не дожидаясь когда пользователь введет что-то, а значит кнопка при первом открытии попапа будет не валидной
+    this._toggleButtonState(this.inputList, this.buttonEl);
 
-  toggleButtonState(inputList, buttonEl); //сразу вызываем функцию, не дожидаясь когда пользователь введет что-то, а значит кнопка при первом открытии попапа будет не валидной
+    this.inputList.forEach(inputEl => {
+      //для каждого инпута добавляем слушатель
+      inputEl.addEventListener('input', () => {
+        //функция isValid проверяем валидный ли код в каждом конкретном инпуте (то есть, для всех инпутов по очереди) в одной форме
+        this._isValid(inputEl);
 
-  inputList.forEach(function (inputEl) {
-    //для каждого инпута добавляем слушатель
-    inputEl.addEventListener('input', () => {
-      //функция isValid проверяем валидный ли код в каждом конкретном инпуте (то есть, для всех инпутов по очереди) в одной форме
-      isValid(formEl, inputEl);
-
-      toggleButtonState(inputList, buttonEl); //вызываем функцию переключения состояния кнопки, в которой лежит функция проверки валидны ли все инпуты одновременно
+        //вызываем функцию переключения состояния кнопки, в которой лежит функция проверки валидны ли все инпуты одновременно
+        this._toggleButtonState(this.inputList, this.buttonEl);
+      });
     });
-  });
-}
+  }
 
-function enableValidation(configClasses) {
-  //функция собирающая со строницы все формы
-  const formList = Array.from(document.querySelectorAll(`${configClasses.formSelector}`)); //ищем все формы и делаем их массивом
-  formList.forEach(function (formEl) {
-    //для каждой формы вызываем функцию setEventListners
-    setEventListeners(formEl);
-  });
-}
+  //функция проверяющая валидность данных
+  _isValid(inputEl) {
+    //если в инпуте в объекте validity ключ valid === false
+    if (!inputEl.validity.valid) {
+      //то показываем ошибку в этом инпуте
+      this._showInputError(inputEl, inputEl.validationMessage);
+    } else {
+      //если valid === true, то спрятать ошибку в этом инпуте
+      this._hideInputError(inputEl);
+    }
+  }
 
-function hasInvalidInput(inputList) {
   //проверка всех инпутов на валидность
-  //принимает массив полей ввода
-  return inputList.some(function (inputEl) {
-    //проходим по массиву методом some, он возвращает true если поля прошли валидацию
-    return !inputEl.validity.valid; //если не прошло, вернуть false
-  });
-}
+  _hasInvalidInput(inputList) {
+    return inputList.some(function (inputEl) {
+      //проходим по массиву методом some, он возвращает true если поля прошли валидацию
+      return !inputEl.validity.valid; //если не прошло, вернуть false
+    });
+  }
 
-function toggleButtonState(inputList, buttonEl) {
-  //приниамает массив полей ввода и кнопку сохранить
-  if (hasInvalidInput(inputList)) {
+  //функция переключения состояния кнопки
+  _toggleButtonState(inputList, buttonEl) {
     //если проверка инпутов возвращает false
-    buttonEl.setAttribute('disabled', true); //добавить неактивный добавить атрибут
-    buttonEl.classList.add(`${configClasses.inactiveButtonClass}`);
-  } else {
-    buttonEl.removeAttribute('disabled'); //если все инпуты true - удалить атрибут
-    buttonEl.classList.remove(`${configClasses.inactiveButtonClass}`);
+    if (this._hasInvalidInput(this.inputList)) {
+      //добавить неактивный класс и добавить атрибут
+      this.buttonEl.setAttribute('disabled', true);
+      this.buttonEl.classList.add(this.validators.inactiveButtonClass);
+    } else {
+      //если все инпуты true - удалить атрибут и класс
+      this.buttonEl.removeAttribute('disabled');
+      this.buttonEl.classList.remove(this.validators.inactiveButtonClass);
+    }
+  }
+
+  //функция включения валидации
+  enableValidation() {
+    this._setEventListeners();
   }
 }
 
-const configClasses = {
+export const validators = {
   formSelector: '.popup__form',
   inputSelector: '.popup__input',
   submitButtonSelector: '.popup__button-save',
@@ -83,5 +91,3 @@ const configClasses = {
   inputErrorClass: 'popup__input_type_error',
   errorClass: 'popup__error_visible'
 };
-
-enableValidation(configClasses);

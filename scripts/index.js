@@ -120,6 +120,10 @@ const placeUrl = document.querySelector('.popup__input_place-info_url');
 const formAddPhoto = document.forms['formAdd'];
 const photoSection = document.querySelector('.photo'); ///добавили секцию, куда добавлять фотографии
 
+//поиск темплейт элементов в файле
+const bigPhoto = document.querySelector('.popup__img');
+const bigPhotoTitle = document.querySelector('.popup__photo-title');
+
 //слушатель событий для открытия попапа добавления фотокарточек
 addButton.addEventListener('click', function () {
   openPopup(popupAddPhoto);
@@ -156,10 +160,6 @@ initialCards.forEach(item => {
 function handleCardClick(name, link) {
   //при клике на каждую картинку открывается попап
   openPopup(popupOpenPhoto);
-
-  //поиск темплейт элементов в файле
-  const bigPhoto = document.querySelector('.popup__img');
-  const bigPhotoTitle = document.querySelector('.popup__photo-title');
 
   //присваиваем адрес и подпись картинкам
   bigPhoto.src = link;

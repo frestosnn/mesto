@@ -28,9 +28,6 @@ export class FormValidator {
 
   //функция для проверки корректности инпутов
   _setEventListeners() {
-    //сразу вызываем функцию, не дожидаясь когда пользователь введет что-то, а значит кнопка при первом открытии попапа будет не валидной
-    this._toggleButtonState();
-
     this.inputList.forEach(inputEl => {
       //для каждого инпута добавляем слушатель
       inputEl.addEventListener('input', () => {

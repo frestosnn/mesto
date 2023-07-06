@@ -29,7 +29,7 @@ export class FormValidator {
   //функция для проверки корректности инпутов
   _setEventListeners() {
     //сразу вызываем функцию, не дожидаясь когда пользователь введет что-то, а значит кнопка при первом открытии попапа будет не валидной
-    this._toggleButtonState(this.inputList, this.buttonEl);
+    this._toggleButtonState();
 
     this.inputList.forEach(inputEl => {
       //для каждого инпута добавляем слушатель
@@ -38,7 +38,7 @@ export class FormValidator {
         this._isValid(inputEl);
 
         //вызываем функцию переключения состояния кнопки, в которой лежит функция проверки валидны ли все инпуты одновременно
-        this._toggleButtonState(this.inputList, this.buttonEl);
+        this._toggleButtonState();
       });
     });
   }
@@ -63,8 +63,17 @@ export class FormValidator {
     });
   }
 
+  //метод удаления ошибок и управления кнопкой
+  resetValidation() {
+    this._toggleButtonState();
+    this.inputList.forEach(inputEl => {
+      this._hideInputError(inputEl);
+    });
+    this.formEl.reset();
+  }
+
   //функция переключения состояния кнопки
-  _toggleButtonState(inputList, buttonEl) {
+  _toggleButtonState() {
     //если проверка инпутов возвращает false
     if (this._hasInvalidInput(this.inputList)) {
       //добавить неактивный класс и добавить атрибут

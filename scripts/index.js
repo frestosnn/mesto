@@ -94,6 +94,7 @@ formEdit.addEventListener('submit', handleProfileFormSubmit);
 const buttonSave = formEdit.querySelector('.popup__button-save');
 editBotton.addEventListener('click', function () {
   openPopup(popupEdit);
+  formValidators['formEdit'].resetValidation();
   fillProfileInputs();
 });
 

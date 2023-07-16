@@ -14,12 +14,8 @@ export class Popup {
     this._popup.classList.remove('popup_opened');
 
     //удаляем слушатели событий
-    this._popup.removeEventListener('click', () => {
-      this.setEventListeners();
-    });
-    document.removeEventListener('keydown', () => {
-      this.setEventListeners();
-    });
+    this._popup.removeEventListener('click', this._handleOverlayClose);
+    document.removeEventListener('keydown', this._handleEscClose);
   }
 
   //метод для закрытия по кнопке Esc
@@ -29,20 +25,17 @@ export class Popup {
     }
   }
 
+  //метод для закрытия по клику на оверлей
+  _handleOverlayClose(evt) {
+    if (evt.target === evt.currentTarget) {
+      this.close(this._popup);
+    }
+  }
+
   setEventListeners() {
-    //функция закрытия при клике на оверлей
-
-    this._popup.addEventListener('click', evt => {
-      //если клик по оверлею (evt.currentTarget это оверлей)
-      if (evt.target === evt.currentTarget) {
-        this.close(this._popup);
-      }
-    });
-
-    //добавили слушатель на событие нажатии клавиши Esc
-    document.addEventListener('keydown', event => {
-      this._handleEscClose(event);
-    });
+    //добавили слушатель на событие нажатии клавиши Esc и оверлею
+    this._popup.addEventListener('click', this._handleOverlayClose);
+    document.addEventListener('keydown', this._handleEscClose);
 
     this.closeButtons = Array.from(document.querySelectorAll('.popup__button-close'));
 

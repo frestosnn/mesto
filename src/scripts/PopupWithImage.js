@@ -1,5 +1,4 @@
 import { Popup } from './Popup.js';
-import { bigPhoto, bigPhotoTitle } from './utils/constants.js';
 
 export class PopupWithImage extends Popup {
   constructor(selector) {
@@ -7,13 +6,13 @@ export class PopupWithImage extends Popup {
     super(selector);
   }
 
-  open() {
+  open(data) {
     //вызываем родительский метод
     super.open();
 
     //дополняем родительский метод
-    bigPhoto.src = this._popup.src;
-    bigPhotoTitle.textContent = this._popup.textContent;
-    bigPhoto.alt = this._popup.textContent;
+    data.link.src = this._popup.src;
+    data.name.textContent = this._popup.textContent;
+    data.name.alt = this._popup.textContent;
   }
 }

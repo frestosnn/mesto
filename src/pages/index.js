@@ -29,9 +29,6 @@ function handleProfileFormSubmit(evt) {
   editInfoPopup.close();
 }
 
-//слушатель событий для отправки формы-рекактирования информации о себе
-formEdit.addEventListener('submit', handleProfileFormSubmit);
-
 //слушатель событий для кнопки редактирования информации о себе
 editBotton.addEventListener('click', () => {
   editInfoPopup.open();
@@ -61,12 +58,7 @@ function createCard(item) {
 //функция открытия больших фото
 function handleCardClick(name, link) {
   //при клике на каждую картинку открывается попап
-  bigPhotoPopup.open();
-
-  //присваиваем адрес и подпись картинкам
-  bigPhoto.src = link;
-  bigPhotoTitle.textContent = name;
-  bigPhoto.alt = name;
+  bigPhotoPopup.open({ name: bigPhotoTitle, link: bigPhoto });
 }
 
 //отрисовываем карточки на странице

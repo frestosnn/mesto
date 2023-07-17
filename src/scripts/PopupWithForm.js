@@ -1,26 +1,27 @@
 import { Popup } from './Popup.js';
 
 export class PopupWithForm extends Popup {
-  constructor(selector, handleForm) {
+  constructor(selector, handleForm, formSelector) {
     //наследуем от родителя
     super(selector);
 
     //функция коллбек-сабмита формы
     this.handleForm = handleForm;
 
-    //данные из инпутов
-    this.placeName = document.querySelector('.popup__input_place-info_name');
-    this.placeUrl = document.querySelector('.popup__input_place-info_url');
+    //ищем форму в попапе
+    this._form = this._popup.querySelector(formSelector);
   }
 
   //собираем данные, которые ввел пользователь
   _getInputValues() {
-    const valuesUser = {
-      name: this.placeName.value,
-      link: this.placeUrl.value
-    };
+    this._inputList = this._popup.querySelectorAll('.popup__input');
 
-    return valuesUser;
+    //создаем пустой массив
+    this._formValues = {};
+    //отпределяем ключи и значения массива
+    this._inputList.forEach(input => (this._formValues[input.name] = input.value));
+
+    return this._formValues;
   }
 
   setEventListeners() {
@@ -28,8 +29,11 @@ export class PopupWithForm extends Popup {
     super.setEventListeners();
 
     //добавляем обработчик события отправки формы
-    this._popup.addEventListener('submit', evt => {
-      this.handleForm(evt);
+    this._form.addEventListener('submit', evt => {
+      //отменяем перезагрузку страницы
+      evt.preventDefault();
+
+      this.handleForm(this._getInputValues());
     });
   }
 }

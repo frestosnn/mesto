@@ -8,15 +8,15 @@ export class UserInfo {
     //данные из разметки
     const userData = {
       name: this._userName.textContent,
-      job: this._userInfo.textContent
+      info: this._userInfo.textContent
     };
 
     return userData;
   }
 
   setUserInfo(data) {
-    //вместо данных из разметки, вставляем данные профиля
+    //вместо данных из разметки, вставляем данные из инпутов попапа(data)
     this._userName.textContent = data.name;
-    this._userInfo.textContent = data.job;
+    this._userInfo.textContent = data.info;
   }
 }

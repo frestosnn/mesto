@@ -4,15 +4,19 @@ export class PopupWithImage extends Popup {
   constructor(selector) {
     //наследуем от родителя
     super(selector);
+
+    //находим элемены в попапе
+    this.image = this._popup.querySelector('.popup__img');
+    this.title = this._popup.querySelector('.popup__photo-title');
   }
 
-  open(data) {
+  open(name, link) {
     //вызываем родительский метод
     super.open();
 
     //дополняем родительский метод
-    data.link.src = this._popup.src;
-    data.name.textContent = this._popup.textContent;
-    data.name.alt = this._popup.textContent;
+    this.image.src = link;
+    this.title.textContent = name;
+    this.title.textContent = name;
   }
 }

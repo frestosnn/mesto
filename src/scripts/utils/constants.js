@@ -34,10 +34,6 @@ export const formEdit = document.forms['formEdit'];
 export const userName = formEdit.querySelector('.popup__input_user-info_name');
 export const userInfo = formEdit.querySelector('.popup__input_user-info_job');
 export const addButton = document.querySelector('.profile__add-button');
-export const photoSection = document.querySelector('.photo');
-
-export const bigPhoto = document.querySelector('.popup__img');
-export const bigPhotoTitle = document.querySelector('.popup__photo-title');
 
 //создаем пустой объект с формами
 export const formValidators = {};

@@ -9,22 +9,16 @@ import { UserInfo } from '../scripts/UserInfo.js';
 import {
   initialCards,
   editBotton,
-  formEdit,
   userInfo,
   userName,
   formValidators,
-  addButton,
-  photoSection,
-  bigPhoto,
-  bigPhotoTitle
+  addButton
 } from '../scripts/utils/constants.js';
 
 //функция добавления данных из инпутов в профиль
-function handleProfileFormSubmit(evt) {
-  evt.preventDefault();
-
+function handleProfileFormSubmit(values) {
   //методом setUserInfo добавляем новые данные в разметку
-  editForm.setUserInfo({ name: userName.value, job: userInfo.value });
+  editForm.setUserInfo(values);
 
   editInfoPopup.close();
 }
@@ -39,7 +33,7 @@ editBotton.addEventListener('click', () => {
 
   //вставляем информацию о пользователе в инпуты
   userName.value = profileData.name;
-  userInfo.value = profileData.job;
+  userInfo.value = profileData.info;
 });
 
 //слушатель событий для открытия попапа добавления фотокарточек
@@ -50,7 +44,7 @@ addButton.addEventListener('click', function () {
 
 //функция создания карточки с помощью класса Card
 function createCard(item) {
-  const newCard = new Card(item.name, item.link, '#photo-template', handleCardClick);
+  const newCard = new Card(item, '#photo-template', handleCardClick);
   const cardElement = newCard.generateCard();
   return cardElement;
 }
@@ -58,7 +52,7 @@ function createCard(item) {
 //функция открытия больших фото
 function handleCardClick(name, link) {
   //при клике на каждую картинку открывается попап
-  bigPhotoPopup.open({ name: bigPhotoTitle, link: bigPhoto });
+  bigPhotoPopup.open(name, link);
 }
 
 //отрисовываем карточки на странице
@@ -101,25 +95,13 @@ const enableValidation = validators => {
 
 enableValidation(validators);
 
-//создаем экземпляры классов для попапов
-const addPhotoPopup = new PopupWithForm('.popup_add_photo', handleFormAdd);
-const editInfoPopup = new PopupWithForm('.popup_add_edit', handleProfileFormSubmit);
-
-//для попапа с открытием больших картинок
-const bigPhotoPopup = new PopupWithImage('.popup_add_big-photo');
-
 //функция-колбэк добавления новой карточки
-function handleFormAdd(evt) {
-  evt.preventDefault();
-
-  //выбираем данные
-  const values = addPhotoPopup._getInputValues();
-
-  //передаем их функцию values
-  const newCard = createCard(values);
+function handleFormAddSubmit(values) {
+  //создаем новую карточку
+  const сard = createCard(values);
 
   //вставляем в разметку
-  photoSection.prepend(newCard);
+  section.addItem(сard);
 
   //закрываем попап
   addPhotoPopup.close();
@@ -130,3 +112,12 @@ const editForm = new UserInfo({
   selectorUserName: '.profile__name',
   selectorUserInfo: '.profile__description'
 });
+
+//создаем экземпляры классов для попапов
+const addPhotoPopup = new PopupWithForm('.popup_add_photo', handleFormAddSubmit, '.popup__form');
+const editInfoPopup = new PopupWithForm('.popup_add_edit', handleProfileFormSubmit, '.popup__form');
+
+//для попапа с открытием больших картинок
+const bigPhotoPopup = new PopupWithImage('.popup_add_big-photo');
+
+const section = new Section({ data: [] }, '.photo');

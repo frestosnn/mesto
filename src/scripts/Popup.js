@@ -19,18 +19,18 @@ export class Popup {
   }
 
   //метод для закрытия по кнопке Esc
-  _handleEscClose(event) {
-    if (event.key === 'Escape') {
+  _handleEscClose = evt => {
+    if (evt.key === 'Escape') {
       this.close(this._popup);
     }
-  }
+  };
 
   //метод для закрытия по клику на оверлей
-  _handleOverlayClose(evt) {
+  _handleOverlayClose = evt => {
     if (evt.target === evt.currentTarget) {
       this.close(this._popup);
     }
-  }
+  };
 
   setEventListeners() {
     //добавили слушатель на событие нажатии клавиши Esc и оверлею

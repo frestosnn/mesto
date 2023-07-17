@@ -14,7 +14,7 @@ export class PopupWithForm extends Popup {
 
   //собираем данные, которые ввел пользователь
   _getInputValues() {
-    this._inputList = this._popup.querySelectorAll('.popup__input');
+    this._inputList = this._form.querySelectorAll('.popup__input');
 
     //создаем пустой массив
     this._formValues = {};
@@ -30,7 +30,6 @@ export class PopupWithForm extends Popup {
 
     //добавляем обработчик события отправки формы
     this._form.addEventListener('submit', evt => {
-      //отменяем перезагрузку страницы
       evt.preventDefault();
 
       this.handleForm(this._getInputValues());

@@ -15,6 +15,8 @@ import {
   addButton
 } from '../scripts/utils/constants.js';
 
+const photoSection = document.querySelector('.photo');
+
 //функция добавления данных из инпутов в профиль
 function handleProfileFormSubmit(values) {
   //методом setUserInfo добавляем новые данные в разметку
@@ -45,7 +47,9 @@ addButton.addEventListener('click', function () {
 //функция создания карточки с помощью класса Card
 function createCard(item) {
   const newCard = new Card(item, '#photo-template', handleCardClick);
+
   const cardElement = newCard.generateCard();
+
   return cardElement;
 }
 

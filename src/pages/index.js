@@ -15,8 +15,6 @@ import {
   addButton
 } from '../scripts/utils/constants.js';
 
-const photoSection = document.querySelector('.photo');
-
 //функция добавления данных из инпутов в профиль
 function handleProfileFormSubmit(values) {
   //методом setUserInfo добавляем новые данные в разметку
@@ -99,6 +97,25 @@ const enableValidation = validators => {
 
 enableValidation(validators);
 
+//создание экземпляра класса UserInfo
+const editForm = new UserInfo({
+  selectorUserName: '.profile__name',
+  selectorUserInfo: '.profile__description'
+});
+
+//создаем экземпляры классов для попапов
+const addPhotoPopup = new PopupWithForm(
+  '.popup_add_photo',
+  handleFormAddSubmit,
+  '.popup__form_card_add'
+);
+const editInfoPopup = new PopupWithForm('.popup_add_edit', handleProfileFormSubmit, '.popup__form');
+
+//для попапа с открытием больших картинок
+const bigPhotoPopup = new PopupWithImage('.popup_add_big-photo');
+
+const section = new Section({ items: [] }, '.photo');
+
 //функция-колбэк добавления новой карточки
 function handleFormAddSubmit(values) {
   //создаем новую карточку
@@ -110,18 +127,3 @@ function handleFormAddSubmit(values) {
   //закрываем попап
   addPhotoPopup.close();
 }
-
-//создание экземпляра класса UserInfo
-const editForm = new UserInfo({
-  selectorUserName: '.profile__name',
-  selectorUserInfo: '.profile__description'
-});
-
-//создаем экземпляры классов для попапов
-const addPhotoPopup = new PopupWithForm('.popup_add_photo', handleFormAddSubmit, '.popup__form');
-const editInfoPopup = new PopupWithForm('.popup_add_edit', handleProfileFormSubmit, '.popup__form');
-
-//для попапа с открытием больших картинок
-const bigPhotoPopup = new PopupWithImage('.popup_add_big-photo');
-
-const section = new Section({ data: [] }, '.photo');

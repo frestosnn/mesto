@@ -24,15 +24,32 @@ export class PopupWithForm extends Popup {
     return this._formValues;
   }
 
+  //метод отмены отправки и вызов функции колбэка-сабмита формы
+  _setFormSubmit = evt => {
+    evt.preventDefault();
+
+    //получаем значения из инпутов
+    this.values = this._getInputValues();
+
+    //передаем значения из инпутов в качестве параметра
+    this.handleForm(this.values);
+  };
+
   setEventListeners() {
     //вызываем родительский метод
     super.setEventListeners();
 
     //добавляем обработчик события отправки формы
-    this._form.addEventListener('submit', evt => {
-      evt.preventDefault();
+    this._form.addEventListener('submit', this._setFormSubmit);
+  }
 
-      this.handleForm(this._getInputValues());
-    });
+  close() {
+    super.close();
+
+    //удаляем обработчик события отправки формы
+    this._form.removeEventListener('submit', this._setFormSubmit);
+
+    //сбрасываем формы
+    this._form.reset();
   }
 }

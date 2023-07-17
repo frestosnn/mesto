@@ -62,7 +62,6 @@ export class FormValidator {
 
   //метод удаления ошибок и управления кнопкой
   resetValidation() {
-    this.formEl.reset();
     this._toggleButtonState();
     this.inputList.forEach(inputEl => {
       this._hideInputError(inputEl);

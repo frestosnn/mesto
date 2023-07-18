@@ -18,7 +18,7 @@ import {
 //функция добавления данных из инпутов в профиль
 function handleProfileFormSubmit(values) {
   //методом setUserInfo добавляем новые данные в разметку
-  editForm.setUserInfo(values);
+  profileSection.setUserInfo(values);
 
   editInfoPopup.close();
 }
@@ -29,7 +29,7 @@ editBotton.addEventListener('click', () => {
   formValidators['formEdit'].resetValidation();
 
   //получаем из разметки информацию о пользователе
-  const profileData = editForm.getUserInfo();
+  const profileData = profileSection.getUserInfo();
 
   //вставляем информацию о пользователе в инпуты
   userName.value = profileData.name;
@@ -98,7 +98,7 @@ const enableValidation = validators => {
 enableValidation(validators);
 
 //создание экземпляра класса UserInfo
-const editForm = new UserInfo({
+const profileSection = new UserInfo({
   selectorUserName: '.profile__name',
   selectorUserInfo: '.profile__description'
 });
@@ -114,15 +114,13 @@ const editInfoPopup = new PopupWithForm('.popup_add_edit', handleProfileFormSubm
 //для попапа с открытием больших картинок
 const bigPhotoPopup = new PopupWithImage('.popup_add_big-photo');
 
-const section = new Section({ items: [] }, '.photo');
-
 //функция-колбэк добавления новой карточки
 function handleFormAddSubmit(values) {
   //создаем новую карточку
   const сard = createCard(values);
 
   //вставляем в разметку
-  section.addItem(сard);
+  cardList.addItem(сard);
 
   //закрываем попап
   addPhotoPopup.close();

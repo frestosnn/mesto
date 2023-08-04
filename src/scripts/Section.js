@@ -1,13 +1,12 @@
 export class Section {
-  constructor({ items, renderer }, selector) {
-    this._items = items;
+  constructor({ renderer }, selector) {
     this._renderer = renderer;
     this._container = document.querySelector(selector);
   }
 
-  renderItems() {
+  renderItems(arr) {
     //для каждой карточки применить функцию renderer
-    this._items.forEach(item => {
+    arr.forEach(item => {
       this._renderer(item);
     });
   }

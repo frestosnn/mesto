@@ -3,6 +3,7 @@ export class Card {
   constructor(data, templateSelector, handleCardClick) {
     this._name = data.name;
     this._link = data.link;
+    this._likes = data.likes;
     this._templateSelector = templateSelector;
     this._handleCardClick = handleCardClick;
   }
@@ -24,6 +25,7 @@ export class Card {
     //объявление искомых переменных
     this._cardImage = this._element.querySelector('.photo__image');
     this._photoTitle = this._element.querySelector('.photo__title');
+    this._likesNumber = this._element.querySelector('.photo__like-numbers');
 
     //вызов слушателей
     this._setEventListners();
@@ -32,6 +34,7 @@ export class Card {
     this._cardImage.src = this._link;
     this._photoTitle.textContent = this._name;
     this._cardImage.alt = this._name;
+    this._likesNumber.textContent = this._likes.length;
 
     return this._element;
   }
@@ -40,6 +43,7 @@ export class Card {
   _handlePhotoLike() {
     this._likeButton.classList.toggle('active');
   }
+
   //метод который удаляет экзепляр карточки по клику
   _handlePhotoDelete() {
     this._element.remove();

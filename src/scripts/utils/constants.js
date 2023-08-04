@@ -34,6 +34,8 @@ export const formEdit = document.forms['formEdit'];
 export const userName = formEdit.querySelector('.popup__input_user-info_name');
 export const userInfo = formEdit.querySelector('.popup__input_user-info_job');
 export const addButton = document.querySelector('.profile__add-button');
+export const profileAvatar = document.querySelector('.profile__avatar');
+export const likeNumbers = document.querySelector('.photo__like-numbers');
 
 //создаем пустой объект с формами
 export const formValidators = {};

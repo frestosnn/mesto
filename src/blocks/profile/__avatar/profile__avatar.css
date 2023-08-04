@@ -4,6 +4,12 @@
   margin-right: 30px;
   object-fit: cover;
   border-radius: 50%;
+  display: block;
+}
+
+.profile__avatar:hover {
+  opacity: 0.8;
+  background: url('../../../images/editAvatar.svg');
 }
 
 @media screen and (max-width: 767px) {

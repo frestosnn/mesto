@@ -7,13 +7,15 @@ import { PopupWithImage } from '../scripts/PopupWithImage.js';
 import { PopupWithForm } from '../scripts/PopupWithForm.js';
 import { UserInfo } from '../scripts/UserInfo.js';
 import {
-  initialCards,
   editBotton,
   userInfo,
   userName,
   formValidators,
-  addButton
+  addButton,
+  profileAvatar
 } from '../scripts/utils/constants.js';
+
+import { Api } from '../scripts/Api.js';
 
 //функция добавления данных из инпутов в профиль
 function handleProfileFormSubmit(values) {
@@ -21,6 +23,11 @@ function handleProfileFormSubmit(values) {
   profileSection.setUserInfo(values);
 
   editInfoPopup.close();
+
+  //сохраняем новую информацию на сервере
+  api.editUserInfo(values).catch(err => {
+    console.log(err); // выведем ошибку в консоль
+  });
 }
 
 //слушатель событий для кнопки редактирования информации о себе
@@ -33,7 +40,7 @@ editBotton.addEventListener('click', () => {
 
   //вставляем информацию о пользователе в инпуты
   userName.value = profileData.name;
-  userInfo.value = profileData.info;
+  userInfo.value = profileData.about;
 });
 
 //слушатель событий для открытия попапа добавления фотокарточек
@@ -56,24 +63,6 @@ function handleCardClick(name, link) {
   //при клике на каждую картинку открывается попап
   bigPhotoPopup.open(name, link);
 }
-
-//отрисовываем карточки на странице
-const cardList = new Section(
-  {
-    items: initialCards, //наш массив
-    renderer: item => {
-      //функция, которая создает карточки
-      const card = createCard(item);
-
-      //к нашему новому массиву применяем метод addItem, который добавляет карточки на страницу
-      cardList.addItem(card);
-    }
-  },
-  '.photo' //селектор контейнера
-);
-
-//запускаем метод renderItems
-cardList.renderItems();
 
 //включаем валидацию
 const enableValidation = validators => {
@@ -100,7 +89,8 @@ enableValidation(validators);
 //создание экземпляра класса UserInfo
 const profileSection = new UserInfo({
   selectorUserName: '.profile__name',
-  selectorUserInfo: '.profile__description'
+  selectorUserInfo: '.profile__description',
+  selectorUserAvatar: '.profile__avatar'
 });
 
 //создаем экземпляры классов для попапов
@@ -111,8 +101,24 @@ const addPhotoPopup = new PopupWithForm(
 );
 const editInfoPopup = new PopupWithForm('.popup_add_edit', handleProfileFormSubmit, '.popup__form');
 
+//экземпляр класса попапа редактирования аватара
+const avatarPopup = new PopupWithForm(
+  '.popup_avatar-change',
+  handleAvatarSubmit,
+  '.popup__form_avatar_change'
+);
+
 //для попапа с открытием больших картинок
 const bigPhotoPopup = new PopupWithImage('.popup_add_big-photo');
+
+//создаем экхемпляр класса Api
+const api = new Api({
+  baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-72',
+  headers: {
+    authorization: '2f3c4c0e-a26e-49e4-99f6-32f26b0c276a',
+    'Content-Type': 'application/json'
+  }
+});
 
 //функция-колбэк добавления новой карточки
 function handleFormAddSubmit(values) {
@@ -124,4 +130,72 @@ function handleFormAddSubmit(values) {
 
   //закрываем попап
   addPhotoPopup.close();
+
+  //сохраняем новые карточки на сервер
+  api.postNewCard(values).catch(err => {
+    console.log(err); // выведем ошибку в консоль
+  });
+}
+
+//отрисовываем карточки на странице
+const cardList = new Section(
+  {
+    renderer: item => {
+      //функция, которая создает карточки
+      const card = createCard(item);
+
+      //к нашему новому массиву применяем метод addItem, который добавляет карточки на страницу
+      cardList.addItem(card);
+    }
+  },
+  '.photo' //селектор контейнера
+);
+
+//создание апи для рендера карточек
+function generateCards() {
+  api
+    .getInitialCards() //получаем массив с карточками с сервера
+
+    //рендер массива
+    .then(res => {
+      cardList.renderItems(res);
+    })
+
+    .catch(err => {
+      console.log(err); // выведем ошибку в консоль
+    });
+}
+
+generateCards();
+
+function uploadUserInfo() {
+  api
+    //получаем инфо о пользователе с сервера
+    .getUserInfo()
+
+    //вставляем в разметку данные с сервера
+    .then(res => {
+      profileSection.setUserInfo(res);
+      profileSection.setUserAvatar(res);
+    })
+
+    .catch(err => {
+      console.log(err); // выведем ошибку в консоль
+    });
+}
+
+uploadUserInfo();
+
+//открытие попапа редактирования аватара
+profileAvatar.addEventListener('click', () => {
+  avatarPopup.open();
+});
+
+//функция-колбэк попапа редактирования аватара
+function handleAvatarSubmit(values) {
+  avatarPopup.close();
+  //добавление данных для патча
+  api.changeAvatar(values).catch(err => {
+    console.log(err); // выведем ошибку в консоль
+  });
 }

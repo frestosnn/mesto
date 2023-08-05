@@ -91,4 +91,14 @@ export class Api {
       }
     }).then(this._isChecked);
   }
+
+  deleteCard(cardId) {
+    return fetch(`${this.url}/cards/${cardId}`, {
+      method: 'DELETE',
+      headers: {
+        authorization: this.token,
+        'Content-Type': 'application/json'
+      }
+    }).then(this._isChecked);
+  }
 }

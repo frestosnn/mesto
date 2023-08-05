@@ -6,6 +6,7 @@ import { Section } from '../scripts/Section.js';
 import { PopupWithImage } from '../scripts/PopupWithImage.js';
 import { PopupWithForm } from '../scripts/PopupWithForm.js';
 import { UserInfo } from '../scripts/UserInfo.js';
+import { PopupWithConfirm } from '../scripts/PopupWithConfirm.js';
 import {
   editBotton,
   userInfo,
@@ -51,9 +52,14 @@ addButton.addEventListener('click', function () {
 
 //функция создания карточки с помощью класса Card
 function createCard(item) {
-  const newCard = new Card(item, '#photo-template', handleCardClick);
+  const newCard = new Card(item, '#photo-template', handleCardClick, openDeletePopup);
 
   const cardElement = newCard.generateCard();
+
+  //если айди пользователей совпадает, то можно удалить
+  if (item._id === item.owner._id) {
+    handleDeleteCard(item);
+  }
 
   return cardElement;
 }
@@ -99,6 +105,8 @@ const addPhotoPopup = new PopupWithForm(
   handleFormAddSubmit,
   '.popup__form_card_add'
 );
+
+//экземпляр класса попапа редактирования информации о себе
 const editInfoPopup = new PopupWithForm('.popup_add_edit', handleProfileFormSubmit, '.popup__form');
 
 //экземпляр класса попапа редактирования аватара
@@ -111,6 +119,25 @@ const avatarPopup = new PopupWithForm(
 //для попапа с открытием больших картинок
 const bigPhotoPopup = new PopupWithImage('.popup_add_big-photo');
 
+//экземпляр класса попапа с подтверждением удаления фото
+const removePopup = new PopupWithConfirm('.popup_remove-card', handleDeleteCard);
+
+function openDeletePopup() {
+  removePopup.open();
+}
+
+//удаление карточки
+function handleDeleteCard(card) {
+  api
+    .deleteCard(card._id)
+    .then(() => {
+      card.remove();
+    })
+    .catch(err => {
+      console.log(err); // выведем ошибку в консоль
+    });
+}
+
 //создаем экхемпляр класса Api
 const api = new Api({
   baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-72',
@@ -122,19 +149,20 @@ const api = new Api({
 
 //функция-колбэк добавления новой карточки
 function handleFormAddSubmit(values) {
-  //создаем новую карточку
-  const сard = createCard(values);
-
-  //вставляем в разметку
-  cardList.addItem(сard);
-
-  //закрываем попап
-  addPhotoPopup.close();
-
   //сохраняем новые карточки на сервер
-  api.postNewCard(values).catch(err => {
-    console.log(err); // выведем ошибку в консоль
-  });
+  api
+    .postNewCard(values)
+    //создаем новую карточку и вставляем в разметку, это нужно для того, чтобы вернулся новый массив с id и likes
+    .then(res => {
+      cardList.addItem(createCard(res));
+    })
+    //закрываем попап
+    .then(() => {
+      addPhotoPopup.close();
+    })
+    .catch(err => {
+      console.log(err); // выведем ошибку в консоль
+    });
 }
 
 //отрисовываем карточки на странице
@@ -199,3 +227,43 @@ function handleAvatarSubmit(values) {
     console.log(err); // выведем ошибку в консоль
   });
 }
+
+//промис с массивом из cardId
+let cardsIdArr = api
+  .getInitialCards()
+  .then(res => {
+    return res.map(item => {
+      return item._id;
+    });
+  })
+  .catch(err => {
+    console.log(err); // выведем ошибку в консоль
+  });
+
+//функция сохранения лайков на сервер
+function saveLikes() {
+  cardsIdArr.then(res => {
+    res.forEach(item => {
+      api.addLike(item).catch(err => {
+        console.log(err); // выведем ошибку в консоль
+      });
+      api.deleteLike(item).catch(err => {
+        console.log(err); // выведем ошибку в консоль
+      });
+    });
+  });
+}
+
+saveLikes();
+
+/*//промис с массивом из cardId
+let cardsIdOwnnerArr = api
+  .getInitialCards()
+  .then(res => {
+    return res.map(item => {
+      return item.owner._id;
+    });
+  })
+  .catch(err => {
+    console.log(err); // выведем ошибку в консоль
+  }); */

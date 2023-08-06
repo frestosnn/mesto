@@ -25,6 +25,7 @@
 .popup__container{background:#fff;border-radius:10px;box-shadow:0 0 25px rgba(0,0,0,.15);min-width:430px;position:relative;z-index:100}@media screen and (max-width:767px){.popup__container{min-width:282px}}
 .popup__container_photo_full{border-radius:0;display:flex;justify-content:center;max-height:75vh;max-width:75vw;min-width:200px;position:relative}
 .popup__title{color:#000;font-family:Inter,Arial,Helvetica,sans-serif;font-size:24px;font-style:normal;font-weight:900;line-height:29px;margin:34px 64px 54px 36px;max-width:330px}@media screen and (max-width:767px){.popup__title{font-size:18px;line-height:22px;margin:25px 22px 73px}}
+.popup__title_size_small{margin:34px 36px 38px}
 .popup_opened{opacity:1;transition:visibility .2s linear,opacity .2s linear;visibility:visible}
 .popup_add_big-photo{background-color:rgba(0,0,0,.9)}
 .popup__img{max-height:75vh;max-width:75vw;-o-object-fit:contain;object-fit:contain;z-index:100}

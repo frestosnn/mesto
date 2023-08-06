@@ -1,1 +1,0 @@
-/*!this._likes.includes(this._myId)*/

@@ -1,23 +1,24 @@
 import { Popup } from './Popup.js';
 
 export class PopupWithConfirm extends Popup {
-  constructor(selector, handleSubmit) {
+  constructor(selector, confirmButton, handleCardDelete) {
     super(selector);
 
-    this.handleSubmit = handleSubmit;
-
-    //кнопка вы уверены?
-    this._confirmButton = document.querySelector('.popup__button-save_popup_delete');
+    this._confirmButton = this._popup.querySelector(confirmButton);
+    this.handleCardDelete = handleCardDelete;
   }
 
-  _cancelLoading = evt => {
-    evt.preventDefault();
-  };
+  open(card, cardId) {
+    super.open();
+    this._card = card;
+    this._cardId = cardId;
+  }
 
-  setEventListners() {
+  setEventListeners() {
+    super.setEventListeners();
+
     this._confirmButton.addEventListener('click', () => {
-      this._cancelLoading();
-      this.handleSubmit(card);
+      this.handleCardDelete(this._card, this._cardId);
     });
   }
 }

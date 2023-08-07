@@ -13,10 +13,25 @@ import {
   userName,
   formValidators,
   addButton,
-  profileAvatar
+  profileAvatar,
+  avatarContainer,
+  avatarImage,
+  addAvatarIcon,
+  buttonSaveNewPlace,
+  buttonUpdateButton,
+  buttonChangeAvatar
 } from '../scripts/utils/constants.js';
 
 import { Api } from '../scripts/Api.js';
+
+//создаем экpемпляр класса Api
+const api = new Api({
+  baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-72',
+  headers: {
+    authorization: '2f3c4c0e-a26e-49e4-99f6-32f26b0c276a',
+    'Content-Type': 'application/json'
+  }
+});
 
 //функция добавления данных из инпутов в профиль
 function handleProfileFormSubmit(values) {
@@ -25,10 +40,17 @@ function handleProfileFormSubmit(values) {
 
   editInfoPopup.close();
 
+  renderLoading(true, 'Сохранение...', buttonUpdateButton);
   //сохраняем новую информацию на сервере
-  api.editUserInfo(values).catch(err => {
-    console.log(err); // выведем ошибку в консоль
-  });
+  api
+    .editUserInfo(values)
+
+    .catch(err => {
+      console.log(err); // выведем ошибку в консоль
+    })
+    .finally(() => {
+      renderLoading(false, 'Сохранить', buttonUpdateButton);
+    });
 }
 
 //слушатель событий для кнопки редактирования информации о себе
@@ -52,14 +74,23 @@ addButton.addEventListener('click', function () {
 
 //функция создания карточки с помощью класса Card
 function createCard(item) {
-  const newCard = new Card(item, '#photo-template', handleCardClick, openDeletePopup);
-
+  const newCard = new Card(
+    item,
+    '#photo-template',
+    handleCardClick,
+    () => {
+      removePopup.open(newCard, newCard._id);
+    },
+    likeCard,
+    dislikeCard
+  );
   const cardElement = newCard.generateCard();
 
-  //если айди пользователей совпадает, то можно удалить
-  if (item._id === item.owner._id) {
-    handleDeleteCard(item);
-  }
+  //вызываем метод управления урной
+  newCard.handleTrashBin();
+
+  //проверяем лайкнуто ли фото
+  newCard.checkLikeColor();
 
   return cardElement;
 }
@@ -120,48 +151,34 @@ const avatarPopup = new PopupWithForm(
 const bigPhotoPopup = new PopupWithImage('.popup_add_big-photo');
 
 //экземпляр класса попапа с подтверждением удаления фото
-const removePopup = new PopupWithConfirm('.popup_remove-card', handleDeleteCard);
-
-function openDeletePopup() {
-  removePopup.open();
-}
-
-//удаление карточки
-function handleDeleteCard(card) {
-  api
-    .deleteCard(card._id)
-    .then(() => {
-      card.remove();
-    })
-    .catch(err => {
-      console.log(err); // выведем ошибку в консоль
-    });
-}
-
-//создаем экхемпляр класса Api
-const api = new Api({
-  baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-72',
-  headers: {
-    authorization: '2f3c4c0e-a26e-49e4-99f6-32f26b0c276a',
-    'Content-Type': 'application/json'
-  }
-});
+const removePopup = new PopupWithConfirm(
+  '.popup_remove-card',
+  '.popup__button-save_popup_delete',
+  handleDeleteCard
+);
 
 //функция-колбэк добавления новой карточки
 function handleFormAddSubmit(values) {
+  renderLoading(true, 'Создание...', buttonSaveNewPlace);
   //сохраняем новые карточки на сервер
   api
     .postNewCard(values)
+
     //создаем новую карточку и вставляем в разметку, это нужно для того, чтобы вернулся новый массив с id и likes
     .then(res => {
       cardList.addItem(createCard(res));
     })
+
     //закрываем попап
     .then(() => {
       addPhotoPopup.close();
     })
     .catch(err => {
       console.log(err); // выведем ошибку в консоль
+    })
+
+    .finally(() => {
+      renderLoading(false, 'Создать', buttonSaveNewPlace);
     });
 }
 
@@ -217,53 +234,88 @@ uploadUserInfo();
 //открытие попапа редактирования аватара
 profileAvatar.addEventListener('click', () => {
   avatarPopup.open();
+  formValidators['formAvatar'].resetValidation();
 });
 
 //функция-колбэк попапа редактирования аватара
 function handleAvatarSubmit(values) {
-  avatarPopup.close();
+  renderLoading(true, 'Сохранение...', buttonChangeAvatar);
   //добавление данных для патча
-  api.changeAvatar(values).catch(err => {
-    console.log(err); // выведем ошибку в консоль
-  });
+  api
+    .changeAvatar(values)
+    .catch(err => {
+      console.log(err); // выведем ошибку в консоль
+    })
+    .finally(() => {
+      renderLoading(false, 'Сохранить', buttonChangeAvatar);
+    });
+
+  avatarPopup.close();
 }
 
-//промис с массивом из cardId
-let cardsIdArr = api
-  .getInitialCards()
-  .then(res => {
-    return res.map(item => {
-      return item._id;
-    });
-  })
-  .catch(err => {
-    console.log(err); // выведем ошибку в консоль
-  });
+//удаление карточки
+function handleDeleteCard(card, cardId) {
+  api
+    .deleteCard(cardId)
 
-//функция сохранения лайков на сервер
-function saveLikes() {
-  cardsIdArr.then(res => {
-    res.forEach(item => {
-      api.addLike(item).catch(err => {
-        console.log(err); // выведем ошибку в консоль
-      });
-      api.deleteLike(item).catch(err => {
-        console.log(err); // выведем ошибку в консоль
-      });
+    .then(() => {
+      card.deleteCard();
+    })
+
+    .then(() => {
+      removePopup.close();
+    })
+
+    .catch(err => {
+      console.log(err); // выведем ошибку в консоль
     });
-  });
 }
 
-saveLikes();
+function likeCard(likeNumber, id, likeButton) {
+  api
+    .addLike(id)
 
-/*//промис с массивом из cardId
-let cardsIdOwnnerArr = api
-  .getInitialCards()
-  .then(res => {
-    return res.map(item => {
-      return item.owner._id;
+    .then(res => {
+      likeNumber.textContent = res.likes.length;
+      likeButton.classList.add('photo__like_active');
+    })
+
+    .catch(err => {
+      console.log(err); // выведем ошибку в консоль
     });
-  })
-  .catch(err => {
-    console.log(err); // выведем ошибку в консоль
-  }); */
+}
+
+function dislikeCard(likeNumber, id, likeButton) {
+  api
+    .deleteLike(id)
+
+    .then(res => {
+      likeNumber.textContent = res.likes.length;
+      likeButton.classList.remove('photo__like_active');
+    })
+
+    .catch(err => {
+      console.log(err); // выведем ошибку в консоль
+    });
+}
+
+//наведение мыши для отображения карандаша
+
+avatarContainer.addEventListener('mouseover', () => {
+  avatarImage.style.opacity = '0.3';
+  addAvatarIcon.style.opacity = '1';
+});
+
+avatarContainer.addEventListener('mouseout', () => {
+  avatarImage.style.opacity = '1';
+  addAvatarIcon.style.opacity = '0';
+});
+
+//функция для загрузки
+function renderLoading(isLoading, text, button) {
+  if (isLoading) {
+    button.textContent = text;
+  } else {
+    button.textContent = text;
+  }
+}

@@ -8,17 +8,24 @@
   </head>
   <body class="page">
     <header class="header">
-      <img class="header__logo" src="<%=require('./images/logo.svg')%>" />" alt="Логотип сервиса
-      Место" />
+      <img
+        class="header__logo"
+        src="<%=require('./images/logo.svg')%>"
+        alt="Логотип сервиса
+      Место"
+      />
     </header>
     <main class="main">
       <section class="profile">
-        <img
-          class="profile__avatar"
-          src="<%=require('./images/Avatar.png')%>"
-          alt="Аватар
+        <div class="profile__avatar-container">
+          <img
+            class="profile__avatar"
+            src="<%=require('./images/Avatar.png')%>"
+            alt="Аватар
         пользователя"
-        />
+          />
+          <div class="profile__add-avatar"></div>
+        </div>
         <div class="profile__info">
           <h1 class="profile__name">Жак-Ив Кусто</h1>
           <button class="profile__edit-button" type="button"></button>
@@ -56,7 +63,9 @@
             />
             <span class="user-job-input-error popup__error"></span>
 
-            <button class="popup__button-save" type="submit">Сохранить</button>
+            <button class="popup__button-save popup__button-save_update_user-info" type="submit">
+              Сохранить
+            </button>
           </form>
         </div>
       </div>
@@ -87,7 +96,9 @@
             />
             <span class="place-url-input-error popup__error"></span>
 
-            <button class="popup__button-save" type="submit">Создать</button>
+            <button class="popup__button-save popup__button-save_add_newplace" type="submit">
+              Создать
+            </button>
           </form>
         </div>
       </div>
@@ -102,16 +113,16 @@
 
       <div class="popup popup_remove-card">
         <div class="popup__container">
-          <form class="popup__form">
-            <h2 class="popup__title">Вы уверены?</h2>
-            <button
-              class="popup__button-close popup__button-close_popup_remove"
-              type="button"
-            ></button>
-            <button class="popup__button-save popup__button-save_popup_delete" type="submit">
+          <button
+            class="popup__button-close popup__button-close_popup_remove"
+            type="button"
+          ></button>
+          <h2 class="popup__title popup__title_size_small">Вы уверены?</h2>
+          <div class="popup__button-container">
+            <button class="popup__button-save popup__button-save_popup_delete" type="button">
               Да
             </button>
-          </form>
+          </div>
         </div>
       </div>
 
@@ -124,14 +135,15 @@
           ></button>
           <form class="popup__form popup__form_avatar_change" name="formAvatar" novalidate>
             <input
-              id="place-url-input"
-              class="popup__input popup__input_place-info_url"
+              id="avatar-url-input"
+              class="popup__input popup__input_avatar_url"
               name="avatar"
               type="url"
               required
-              placeholder="Ссылка на картинку"
+              placeholder="Ссылка на аватар"
             />
-            <span class="place-url-input-error popup__error"></span>
+            <span class="avatar-url-input-error popup__error"></span>
+
             <button class="popup__button-save popup__button-save_popup_avatar" type="submit">
               Сохранить
             </button>

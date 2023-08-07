@@ -36,6 +36,13 @@ export const userInfo = formEdit.querySelector('.popup__input_user-info_job');
 export const addButton = document.querySelector('.profile__add-button');
 export const profileAvatar = document.querySelector('.profile__avatar');
 export const likeNumbers = document.querySelector('.photo__like-numbers');
+export const avatarContainer = document.querySelector('.profile__avatar-container');
+export const avatarImage = document.querySelector('.profile__avatar');
+export const addAvatarIcon = document.querySelector('.profile__add-avatar');
+
+export const buttonSaveNewPlace = document.querySelector('.popup__button-save_add_newplace');
+export const buttonUpdateButton = document.querySelector('.popup__button-save_update_user-info');
+export const buttonChangeAvatar = document.querySelector('.popup__button-save_popup_avatar');
 
 //создаем пустой объект с формами
 export const formValidators = {};

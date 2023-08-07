@@ -13,6 +13,6 @@
   opacity: 0.5;
 }
 
-.active {
+.photo__like_active {
   background: url('../../../images/Union.svg');
 }

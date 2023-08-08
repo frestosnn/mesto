@@ -236,8 +236,8 @@ const promises = [getCards(), getId()];
 
 Promise.all(promises)
   .then(([cards, userId]) => {
-    cardList.renderItems(cards);
     myId = userId;
+    cardList.renderItems(cards);
   })
 
   .catch(err => {

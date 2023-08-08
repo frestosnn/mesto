@@ -4,9 +4,9 @@ export class Section {
     this._container = document.querySelector(selector);
   }
 
-  renderItems(arr) {
+  renderItems(items) {
     //для каждой карточки применить функцию renderer
-    arr.forEach(item => {
+    items.forEach(item => {
       this._renderer(item);
     });
   }

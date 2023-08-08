@@ -1,6 +1,14 @@
 //создаем класс карточки
 export class Card {
-  constructor(data, templateSelector, handleCardClick, openDeletePopup, likeCard, dislikeCard) {
+  constructor(
+    data,
+    templateSelector,
+    handleCardClick,
+    openDeletePopup,
+    likeCard,
+    dislikeCard,
+    myId
+  ) {
     this._name = data.name;
     this._link = data.link;
     this._likes = data.likes;
@@ -11,7 +19,7 @@ export class Card {
     this._id = data._id;
     this._ownerId = data.owner._id;
 
-    this._myId = '1507d79db7819dd90a9a1caf';
+    this._myId = myId;
 
     this.likeCard = likeCard;
     this.dislikeCard = dislikeCard;
@@ -69,8 +77,10 @@ export class Card {
       })
     ) {
       this.dislikeCard(this.likesNumber, this._id, this.likeButton);
+      this._likes = this._likes.filter(item => item._id !== this._myId);
     } else {
       this.likeCard(this.likesNumber, this._id, this.likeButton);
+      this._likes.push({ _id: this._myId });
     }
   }
 

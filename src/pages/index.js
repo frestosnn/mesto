@@ -23,6 +23,7 @@ import {
 } from '../scripts/utils/constants.js';
 
 import { Api } from '../scripts/Api.js';
+import { renderLoading } from '../scripts/utils/renderLoading.js';
 
 //создаем экpемпляр класса Api
 const api = new Api({
@@ -38,8 +39,6 @@ function handleProfileFormSubmit(values) {
   //методом setUserInfo добавляем новые данные в разметку
   profileSection.setUserInfo(values);
 
-  editInfoPopup.close();
-
   renderLoading(true, 'Сохранение...', buttonUpdateButton);
   //сохраняем новую информацию на сервере
   api
@@ -48,6 +47,11 @@ function handleProfileFormSubmit(values) {
     .catch(err => {
       console.log(err); // выведем ошибку в консоль
     })
+
+    .then(() => {
+      editInfoPopup.close();
+    })
+
     .finally(() => {
       renderLoading(false, 'Сохранить', buttonUpdateButton);
     });
@@ -82,7 +86,8 @@ function createCard(item) {
       removePopup.open(newCard, newCard._id);
     },
     likeCard,
-    dislikeCard
+    dislikeCard,
+    myId
   );
   const cardElement = newCard.generateCard();
 
@@ -93,6 +98,34 @@ function createCard(item) {
   newCard.checkLikeColor();
 
   return cardElement;
+}
+
+function likeCard(likeNumber, id, likeButton) {
+  api
+    .addLike(id)
+
+    .then(res => {
+      likeNumber.textContent = res.likes.length;
+      likeButton.classList.add('photo__like_active');
+    })
+
+    .catch(err => {
+      console.log(err); // выведем ошибку в консоль
+    });
+}
+
+function dislikeCard(likeNumber, id, likeButton) {
+  api
+    .deleteLike(id)
+
+    .then(res => {
+      likeNumber.textContent = res.likes.length;
+      likeButton.classList.remove('photo__like_active');
+    })
+
+    .catch(err => {
+      console.log(err); // выведем ошибку в консоль
+    });
 }
 
 //функция открытия больших фото
@@ -157,31 +190,6 @@ const removePopup = new PopupWithConfirm(
   handleDeleteCard
 );
 
-//функция-колбэк добавления новой карточки
-function handleFormAddSubmit(values) {
-  renderLoading(true, 'Создание...', buttonSaveNewPlace);
-  //сохраняем новые карточки на сервер
-  api
-    .postNewCard(values)
-
-    //создаем новую карточку и вставляем в разметку, это нужно для того, чтобы вернулся новый массив с id и likes
-    .then(res => {
-      cardList.addItem(createCard(res));
-    })
-
-    //закрываем попап
-    .then(() => {
-      addPhotoPopup.close();
-    })
-    .catch(err => {
-      console.log(err); // выведем ошибку в консоль
-    })
-
-    .finally(() => {
-      renderLoading(false, 'Создать', buttonSaveNewPlace);
-    });
-}
-
 //отрисовываем карточки на странице
 const cardList = new Section(
   {
@@ -196,22 +204,45 @@ const cardList = new Section(
   '.photo' //селектор контейнера
 );
 
+let myId;
+
 //создание апи для рендера карточек
-function generateCards() {
-  api
+const getCards = () => {
+  return api
     .getInitialCards() //получаем массив с карточками с сервера
 
-    //рендер массива
     .then(res => {
-      cardList.renderItems(res);
+      return res; // Возвращаем полученные карточки
     })
 
     .catch(err => {
       console.log(err); // выведем ошибку в консоль
     });
-}
+};
 
-generateCards();
+const getId = () => {
+  return api
+    .getUserInfo()
+
+    .then(res => {
+      return res._id;
+    })
+    .catch(err => {
+      console.log(err); // выведем ошибку в консоль
+    });
+};
+
+const promises = [getCards(), getId()];
+
+Promise.all(promises)
+  .then(([cards, userId]) => {
+    cardList.renderItems(cards);
+    myId = userId;
+  })
+
+  .catch(err => {
+    console.log(err); // Выведем ошибку в консоль
+  });
 
 function uploadUserInfo() {
   api
@@ -237,20 +268,53 @@ profileAvatar.addEventListener('click', () => {
   formValidators['formAvatar'].resetValidation();
 });
 
+//функция-колбэк добавления новой карточки
+function handleFormAddSubmit(values) {
+  renderLoading(true, 'Создание...', buttonSaveNewPlace);
+  //сохраняем новые карточки на сервер
+  api
+    .postNewCard(values)
+
+    //создаем новую карточку и вставляем в разметку, это нужно для того, чтобы вернулся новый массив с id и likes
+    .then(res => {
+      cardList.addItem(createCard(res));
+    })
+
+    //закрываем попап
+    .then(() => {
+      addPhotoPopup.close();
+    })
+
+    .catch(err => {
+      console.log(err); // выведем ошибку в консоль
+    })
+
+    .finally(() => {
+      renderLoading(false, 'Создать', buttonSaveNewPlace);
+    });
+}
+
 //функция-колбэк попапа редактирования аватара
 function handleAvatarSubmit(values) {
   renderLoading(true, 'Сохранение...', buttonChangeAvatar);
   //добавление данных для патча
   api
     .changeAvatar(values)
+
+    .then(res => {
+      profileSection.setUserAvatar(res);
+    })
+
     .catch(err => {
       console.log(err); // выведем ошибку в консоль
+    })
+
+    .then(() => {
+      avatarPopup.close();
     })
     .finally(() => {
       renderLoading(false, 'Сохранить', buttonChangeAvatar);
     });
-
-  avatarPopup.close();
 }
 
 //удаление карточки
@@ -271,34 +335,6 @@ function handleDeleteCard(card, cardId) {
     });
 }
 
-function likeCard(likeNumber, id, likeButton) {
-  api
-    .addLike(id)
-
-    .then(res => {
-      likeNumber.textContent = res.likes.length;
-      likeButton.classList.add('photo__like_active');
-    })
-
-    .catch(err => {
-      console.log(err); // выведем ошибку в консоль
-    });
-}
-
-function dislikeCard(likeNumber, id, likeButton) {
-  api
-    .deleteLike(id)
-
-    .then(res => {
-      likeNumber.textContent = res.likes.length;
-      likeButton.classList.remove('photo__like_active');
-    })
-
-    .catch(err => {
-      console.log(err); // выведем ошибку в консоль
-    });
-}
-
 //наведение мыши для отображения карандаша
 
 avatarContainer.addEventListener('mouseover', () => {
@@ -310,12 +346,3 @@ avatarContainer.addEventListener('mouseout', () => {
   avatarImage.style.opacity = '1';
   addAvatarIcon.style.opacity = '0';
 });
-
-//функция для загрузки
-function renderLoading(isLoading, text, button) {
-  if (isLoading) {
-    button.textContent = text;
-  } else {
-    button.textContent = text;
-  }
-}

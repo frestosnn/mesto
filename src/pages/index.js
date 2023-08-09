@@ -246,48 +246,37 @@ const getCards = () => {
     });
 };
 
-//получаем айти пользователя
-const getId = () => {
+//получаем айди пользователя
+const getCurrentUserInfo = () => {
   return api
     .getUserInfo()
 
     .then(res => {
-      return res._id;
+      return res;
     })
     .catch(err => {
       console.log(err); // выведем ошибку в консоль
     });
 };
 
-const promises = [getCards(), getId()];
+const promises = [getCards(), getCurrentUserInfo()];
 
 Promise.all(promises)
-  .then(([cards, userId]) => {
-    myId = userId;
+  .then(([cards, userInfo]) => {
+    //присваиваем фйди пользователя
+    myId = userInfo._id;
+
+    //подгружаем информацию о пользователе с сервера
+    profileSection.setUserInfo(userInfo);
+    profileSection.setUserAvatar(userInfo);
+
+    //рендер карточек
     cardList.renderItems(cards);
   })
 
   .catch(err => {
     console.log(err); // Выведем ошибку в консоль
   });
-
-function uploadUserInfo() {
-  api
-    //получаем инфо о пользователе с сервера
-    .getUserInfo()
-
-    //вставляем в разметку данные с сервера
-    .then(res => {
-      profileSection.setUserInfo(res);
-      profileSection.setUserAvatar(res);
-    })
-
-    .catch(err => {
-      console.log(err); // выведем ошибку в консоль
-    });
-}
-
-uploadUserInfo();
 
 //открытие попапа редактирования аватара
 profileAvatar.addEventListener('click', () => {
@@ -327,12 +316,12 @@ function handleDeleteCard(card, cardId) {
       card.deleteCard();
     })
 
-    .then(() => {
-      removePopup.close();
-    })
-
     .catch(err => {
       console.log(err); // выведем ошибку в консоль
+    })
+
+    .then(() => {
+      removePopup.close();
     });
 }
 

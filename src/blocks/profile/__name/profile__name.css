@@ -10,6 +10,8 @@
   white-space: nowrap;
   max-width: 294px;
   overflow: hidden;
+  min-width: 294px;
+  min-height: 42px;
 }
 
 @media screen and (max-width: 767px) {

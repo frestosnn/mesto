@@ -204,6 +204,32 @@ const cardList = new Section(
   '.photo' //селектор контейнера
 );
 
+//функция-колбэк добавления новой карточки
+function handleFormAddSubmit(values) {
+  renderLoading(true, 'Создание...', buttonSaveNewPlace);
+  //сохраняем новые карточки на сервер
+  api
+    .postNewCard(values)
+
+    //создаем новую карточку и вставляем в разметку, это нужно для того, чтобы вернулся новый массив с id и likes
+    .then(res => {
+      cardList.addTopItem(createCard(res));
+    })
+
+    //закрываем попап
+    .then(() => {
+      addPhotoPopup.close();
+    })
+
+    .catch(err => {
+      console.log(err); // выведем ошибку в консоль
+    })
+
+    .finally(() => {
+      renderLoading(false, 'Создать', buttonSaveNewPlace);
+    });
+}
+
 let myId;
 
 //создание апи для рендера карточек
@@ -220,6 +246,7 @@ const getCards = () => {
     });
 };
 
+//получаем айти пользователя
 const getId = () => {
   return api
     .getUserInfo()
@@ -267,32 +294,6 @@ profileAvatar.addEventListener('click', () => {
   avatarPopup.open();
   formValidators['formAvatar'].resetValidation();
 });
-
-//функция-колбэк добавления новой карточки
-function handleFormAddSubmit(values) {
-  renderLoading(true, 'Создание...', buttonSaveNewPlace);
-  //сохраняем новые карточки на сервер
-  api
-    .postNewCard(values)
-
-    //создаем новую карточку и вставляем в разметку, это нужно для того, чтобы вернулся новый массив с id и likes
-    .then(res => {
-      cardList.addItem(createCard(res));
-    })
-
-    //закрываем попап
-    .then(() => {
-      addPhotoPopup.close();
-    })
-
-    .catch(err => {
-      console.log(err); // выведем ошибку в консоль
-    })
-
-    .finally(() => {
-      renderLoading(false, 'Создать', buttonSaveNewPlace);
-    });
-}
 
 //функция-колбэк попапа редактирования аватара
 function handleAvatarSubmit(values) {
